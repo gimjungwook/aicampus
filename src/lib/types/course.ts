@@ -42,16 +42,23 @@ export interface Module {
   lessons?: Lesson[]
 }
 
+// 콘텐츠 타입
+export type ContentType = 'video' | 'blog'
+
 // 레슨
 export interface Lesson {
   id: string
   module_id: string
   title: string
   description: string | null
-  youtube_video_id: string
+  youtube_video_id: string | null  // 블로그 타입은 null
   duration_minutes: number | null
   order_index: number
   created_at: string
+  // Phase 8: 블로그 콘텐츠 지원
+  content_type: ContentType
+  markdown_content: string | null
+  is_free: boolean
 }
 
 // 수강 등록

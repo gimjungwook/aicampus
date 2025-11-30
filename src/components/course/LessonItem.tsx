@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { cn } from '@/lib/utils/cn'
-import { Check, Circle, Lock, Play } from 'lucide-react'
+import { Check, Circle, Lock, Play, FileText } from 'lucide-react'
 import type { LessonWithProgress } from '@/lib/types/course'
 
 interface LessonItemProps {
@@ -20,8 +20,10 @@ export function LessonItem({
   isEnrolled,
   courseId,
 }: LessonItemProps) {
-  const isLocked = !isEnrolled
+  // is_free 레슨은 미등록 사용자도 접근 가능
+  const isLocked = !isEnrolled && !lesson.is_free
   const isCompleted = lesson.isCompleted
+  const isBlog = lesson.content_type === 'blog'
 
   // 레슨 번호 형식: 1-1, 1-2, 2-1 등
   const lessonNumber = `${moduleIndex + 1}-${lessonIndex + 1}`
@@ -67,9 +69,13 @@ export function LessonItem({
         </span>
       )}
 
-      {/* 재생 버튼 (호버 시) */}
+      {/* 재생/읽기 버튼 (호버 시) */}
       {!isLocked && (
-        <Play className="h-4 w-4 shrink-0 text-primary opacity-0 transition-opacity group-hover/lesson:opacity-100" />
+        isBlog ? (
+          <FileText className="h-4 w-4 shrink-0 text-primary opacity-0 transition-opacity group-hover/lesson:opacity-100" />
+        ) : (
+          <Play className="h-4 w-4 shrink-0 text-primary opacity-0 transition-opacity group-hover/lesson:opacity-100" />
+        )
       )}
     </div>
   )
