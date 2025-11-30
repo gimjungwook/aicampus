@@ -1,0 +1,247 @@
+'use server'
+
+import { createClient } from '@/lib/supabase/server'
+import type { Category, Course, CourseWithProgress, Lesson } from '@/lib/types/course'
+
+// 모든 카테고리 가져오기
+export async function getCategories(): Promise<Category[]> {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('categories')
+    .select('*')
+    .order('order_index')
+
+  if (error) {
+    console.error('Error fetching categories:', error)
+    return []
+  }
+
+  return data || []
+}
+
+// 모든 코스 가져오기 (카테고리 필터 포함)
+export async function getCourses(categorySlug?: string): Promise<Course[]> {
+  const supabase = await createClient()
+
+  let query = supabase
+    .from('courses')
+    .select(`
+      *,
+      category:categories(*)
+    `)
+    .order('created_at', { ascending: false })
+
+  // 카테고리 필터링
+  if (categorySlug && categorySlug !== 'all') {
+    // 먼저 카테고리 ID를 가져옴
+    const { data: category } = await supabase
+      .from('categories')
+      .select('id')
+      .eq('slug', categorySlug)
+      .single()
+
+    if (category) {
+      query = query.eq('category_id', category.id)
+    }
+  }
+
+  const { data, error } = await query
+
+  if (error) {
+    console.error('Error fetching courses:', error)
+    return []
+  }
+
+  return data || []
+}
+
+// 사용자 진도가 포함된 코스 목록 가져오기
+export async function getCoursesWithProgress(
+  categorySlug?: string
+): Promise<CourseWithProgress[]> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // 코스 가져오기
+  const courses = await getCourses(categorySlug)
+
+  if (!user) {
+    // 비로그인 사용자: 진도 없이 반환
+    return courses.map(course => ({
+      ...course,
+      enrollment: null,
+      completedLessons: 0,
+      progressPercent: 0,
+    }))
+  }
+
+  // 사용자 수강 등록 정보 가져오기
+  const { data: enrollments } = await supabase
+    .from('user_enrollments')
+    .select('*')
+    .eq('user_id', user.id)
+
+  // 사용자 레슨 진도 가져오기
+  const { data: progress } = await supabase
+    .from('lesson_progress')
+    .select('lesson_id')
+    .eq('user_id', user.id)
+    .eq('completed', true)
+
+  const completedLessonIds = new Set(progress?.map(p => p.lesson_id) || [])
+
+  // 각 코스의 레슨 ID 가져오기 (진도 계산용)
+  const courseLessons = await Promise.all(
+    courses.map(async (course) => {
+      const { data: lessons } = await supabase
+        .from('lessons')
+        .select('id, module_id')
+        .in('module_id',
+          (await supabase
+            .from('modules')
+            .select('id')
+            .eq('course_id', course.id)
+          ).data?.map(m => m.id) || []
+        )
+      return { courseId: course.id, lessonIds: lessons?.map(l => l.id) || [] }
+    })
+  )
+
+  return courses.map(course => {
+    const enrollment = enrollments?.find(e => e.course_id === course.id)
+    const lessonIds = courseLessons.find(cl => cl.courseId === course.id)?.lessonIds || []
+    const completedCount = lessonIds.filter(id => completedLessonIds.has(id)).length
+    const total = course.total_lessons || lessonIds.length
+
+    return {
+      ...course,
+      enrollment: enrollment || null,
+      completedLessons: completedCount,
+      progressPercent: total > 0 ? Math.round((completedCount / total) * 100) : 0,
+    }
+  })
+}
+
+// 코스 상세 가져오기 (모듈, 레슨 포함)
+export async function getCourseById(courseId: string) {
+  const supabase = await createClient()
+
+  const { data: course, error } = await supabase
+    .from('courses')
+    .select(`
+      *,
+      category:categories(*)
+    `)
+    .eq('id', courseId)
+    .single()
+
+  if (error || !course) {
+    console.error('Error fetching course:', error)
+    return null
+  }
+
+  // 모듈과 레슨 가져오기
+  const { data: modules } = await supabase
+    .from('modules')
+    .select(`
+      *,
+      lessons(*)
+    `)
+    .eq('course_id', courseId)
+    .order('order_index')
+
+  // 각 모듈의 레슨 정렬
+  const sortedModules = modules?.map(module => ({
+    ...module,
+    lessons: module.lessons?.sort((a: { order_index: number }, b: { order_index: number }) =>
+      a.order_index - b.order_index
+    ) || [],
+  })) || []
+
+  return {
+    ...course,
+    modules: sortedModules,
+  }
+}
+
+// 코스 상세 + 사용자 진도 가져오기
+export async function getCourseWithProgress(courseId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const course = await getCourseById(courseId)
+
+  if (!course) return null
+
+  if (!user) {
+    // 비로그인: 진도 정보 없이 반환
+    return {
+      ...course,
+      enrollment: null,
+      completedLessons: 0,
+      progressPercent: 0,
+      modules: course.modules.map((module: { lessons: Lesson[] }) => ({
+        ...module,
+        completedCount: 0,
+        lessons: module.lessons.map((lesson: Lesson) => ({
+          ...lesson,
+          isCompleted: false,
+          progress: null,
+        })),
+      })),
+    }
+  }
+
+  // 수강 등록 확인
+  const { data: enrollment } = await supabase
+    .from('user_enrollments')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('course_id', courseId)
+    .single()
+
+  // 레슨 진도 가져오기
+  const { data: progressData } = await supabase
+    .from('lesson_progress')
+    .select('*')
+    .eq('user_id', user.id)
+
+  const progressMap = new Map(
+    progressData?.map(p => [p.lesson_id, p]) || []
+  )
+
+  let totalCompleted = 0
+  const modulesWithProgress = course.modules.map((module: { lessons: { id: string }[] }) => {
+    let moduleCompleted = 0
+    const lessonsWithProgress = module.lessons.map((lesson: { id: string }) => {
+      const progress = progressMap.get(lesson.id)
+      const isCompleted = progress?.completed || false
+      if (isCompleted) {
+        totalCompleted++
+        moduleCompleted++
+      }
+      return {
+        ...lesson,
+        isCompleted,
+        progress: progress || null,
+      }
+    })
+    return {
+      ...module,
+      completedCount: moduleCompleted,
+      lessons: lessonsWithProgress,
+    }
+  })
+
+  const total = course.total_lessons ||
+    course.modules.reduce((sum: number, m: { lessons: unknown[] }) => sum + m.lessons.length, 0)
+
+  return {
+    ...course,
+    enrollment: enrollment || null,
+    completedLessons: totalCompleted,
+    progressPercent: total > 0 ? Math.round((totalCompleted / total) * 100) : 0,
+    modules: modulesWithProgress,
+  }
+}

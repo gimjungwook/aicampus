@@ -1,26 +1,185 @@
 @import "tailwindcss";
 
 :root {
+  /* Primary Colors - Duolingo Green */
+  --primary: #58cc02;
+  --primary-foreground: #ffffff;
+  --primary-hover: #46a302;
+  --primary-shadow: #46a302;
+
+  /* Secondary Colors */
+  --secondary: #e5e5e5;
+  --secondary-foreground: #4b4b4b;
+  --secondary-hover: #d4d4d4;
+
+  /* Background & Foreground */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #3c3c3c;
+
+  /* Muted */
+  --muted: #f7f7f7;
+  --muted-foreground: #777777;
+
+  /* Border */
+  --border: #e5e5e5;
+
+  /* Card */
+  --card: #ffffff;
+  --card-foreground: #3c3c3c;
+
+  /* Destructive */
+  --destructive: #ff4b4b;
+  --destructive-foreground: #ffffff;
+
+  /* Ring (focus) */
+  --ring: #58cc02;
+
+  /* Radius */
+  --radius: 0.75rem;
+}
+
+.dark {
+  /* Primary Colors - Duolingo Green (darker mode) */
+  --primary: #58cc02;
+  --primary-foreground: #ffffff;
+  --primary-hover: #6ee423;
+  --primary-shadow: #3d8f01;
+
+  /* Secondary Colors */
+  --secondary: #37464f;
+  --secondary-foreground: #b8c4ce;
+  --secondary-hover: #4b5d68;
+
+  /* Background & Foreground */
+  --background: #131f24;
+  --foreground: #ffffff;
+
+  /* Muted */
+  --muted: #1a2c35;
+  --muted-foreground: #8b9da8;
+
+  /* Border */
+  --border: #2d3f4a;
+
+  /* Card */
+  --card: #1a2c35;
+  --card-foreground: #ffffff;
+
+  /* Destructive */
+  --destructive: #ff4b4b;
+  --destructive-foreground: #ffffff;
+
+  /* Ring (focus) */
+  --ring: #58cc02;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-shadow: var(--primary-shadow);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-ring: var(--ring);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --radius: var(--radius);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base styles */
+* {
+  border-color: var(--border);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), 'Pretendard Variable', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus styles - exclude inputs that handle their own focus */
+:focus-visible:not(input):not(textarea):not(select):not(button) {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Selection */
+::selection {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Animations */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-in-from-bottom-2 {
+  from { transform: translateY(0.5rem); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slide-in-from-right-2 {
+  from { transform: translateX(0.5rem); }
+  to { transform: translateX(0); }
+}
+
+.animate-in {
+  animation-duration: 150ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: both;
+}
+
+.fade-in {
+  animation-name: fade-in;
+}
+
+.slide-in-from-bottom-2 {
+  animation-name: slide-in-from-bottom-2;
+}
+
+.slide-in-from-right-2 {
+  animation-name: slide-in-from-right-2;
+}
+
+.duration-300 {
+  animation-duration: 300ms;
+}
+
+/* Line clamp */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
