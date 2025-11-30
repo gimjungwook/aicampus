@@ -56,7 +56,7 @@ export function ProfileEditForm({ profile, onUpdate }: ProfileEditFormProps) {
 
     startTransition(async () => {
       const result = await updateProfile({
-        nickname: nickname.trim() || null,
+        nickname: nickname.trim() || undefined,
         marketing_consent: marketingConsent,
       })
 
