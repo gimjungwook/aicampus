@@ -9,7 +9,7 @@ interface ConversationListProps {
   conversations: ConversationWithPreview[]
   selectedId: string | null
   onSelect: (id: string) => void
-  onCreate: () => Promise<void>
+  onCreate: () => void
   onDelete: (id: string) => Promise<void>
   onClose?: () => void
   isCreating?: boolean

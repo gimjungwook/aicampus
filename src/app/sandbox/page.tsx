@@ -76,18 +76,6 @@ export default function SandboxPage() {
     loadConversations()
   }, [user])
 
-  // 대화 생성
-  const handleCreate = async () => {
-    setIsCreating(true)
-    const conversation = await createConversation()
-    if (conversation) {
-      setConversations((prev) => [conversation, ...prev])
-      setSelectedId(conversation.id)
-      setIsMobileSidebarOpen(false)
-    }
-    setIsCreating(false)
-  }
-
   // 대화 삭제
   const handleDelete = async (id: string) => {
     const success = await deleteConversation(id)
@@ -156,7 +144,7 @@ export default function SandboxPage() {
             conversations={conversations}
             selectedId={selectedId}
             onSelect={handleSelect}
-            onCreate={handleCreate}
+            onCreate={handleNewChat}
             onDelete={handleDelete}
             onClose={() => setIsSidebarOpen(false)}
             isCreating={isCreating}
