@@ -20,11 +20,18 @@ export function useSandbox({ conversationId }: UseSandboxOptions) {
   const [isStreaming, setIsStreaming] = useState(false)
   const [usage, setUsage] = useState<SandboxUsage>({ count: 0, limit: 20, resetAt: '' })
   const abortControllerRef = useRef<AbortController | null>(null)
+  const skipLoadRef = useRef(false)
 
   // 대화 변경 시 메시지 로드
   useEffect(() => {
     if (!conversationId) {
       setMessages([])
+      return
+    }
+
+    // 새 대화 생성 직후 첫 메시지 전송 시 로드 스킵 (race condition 방지)
+    if (skipLoadRef.current) {
+      skipLoadRef.current = false
       return
     }
 
@@ -59,6 +66,11 @@ export function useSandbox({ conversationId }: UseSandboxOptions) {
       const targetConversationId = overrideConversationId || conversationId
       if (!targetConversationId || !content.trim() || isStreaming) return
       if (usage.count >= usage.limit) return
+
+      // 새 대화 생성 직후 첫 메시지 전송 시 로드 스킵 플래그 설정
+      if (overrideConversationId) {
+        skipLoadRef.current = true
+      }
 
       // 사용자 메시지 추가
       const userMessage: UIMessage = {
