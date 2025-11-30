@@ -16,6 +16,11 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : 'http://localhost:3000'
+  ),
   title: 'AI Campus - AI 활용 교육 플랫폼',
   description: '비기술 직군을 위한 AI 활용 교육 플랫폼. Google Gemini를 활용한 실습 중심 학습.',
   keywords: ['AI', '인공지능', '교육', 'Gemini', '비기술직', '업무자동화'],
