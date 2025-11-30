@@ -14,6 +14,7 @@ interface ChatInterfaceProps {
   onSend: () => void
   onStop?: () => void
   isLoading: boolean
+  isLoadingMessages?: boolean
   isStreaming: boolean
   usage: SandboxUsage
   error?: string
@@ -28,6 +29,7 @@ export function ChatInterface({
   onSend,
   onStop,
   isLoading,
+  isLoadingMessages = false,
   isStreaming,
   usage,
   error,
@@ -72,7 +74,38 @@ export function ChatInterface({
     <div className="flex h-full flex-col">
       {/* 메시지 영역 */}
       <div className="flex-1 overflow-y-auto">
-        {messages.length === 0 ? (
+        {isLoadingMessages && messages.length === 0 ? (
+          <div className="mx-auto max-w-3xl space-y-6 p-4 pb-32">
+            {/* 사용자 메시지 스켈레톤 */}
+            <div className="flex justify-end">
+              <div className="max-w-[85%] space-y-2">
+                <div className="h-4 w-48 animate-pulse rounded-lg bg-muted ml-auto" />
+                <div className="h-4 w-32 animate-pulse rounded-lg bg-muted ml-auto" />
+              </div>
+            </div>
+            {/* AI 응답 스켈레톤 */}
+            <div className="flex justify-start">
+              <div className="max-w-[85%] space-y-2">
+                <div className="h-4 w-64 animate-pulse rounded-lg bg-muted" />
+                <div className="h-4 w-56 animate-pulse rounded-lg bg-muted" />
+                <div className="h-4 w-48 animate-pulse rounded-lg bg-muted" />
+              </div>
+            </div>
+            {/* 사용자 메시지 스켈레톤 */}
+            <div className="flex justify-end">
+              <div className="max-w-[85%] space-y-2">
+                <div className="h-4 w-40 animate-pulse rounded-lg bg-muted ml-auto" />
+              </div>
+            </div>
+            {/* AI 응답 스켈레톤 */}
+            <div className="flex justify-start">
+              <div className="max-w-[85%] space-y-2">
+                <div className="h-4 w-72 animate-pulse rounded-lg bg-muted" />
+                <div className="h-4 w-64 animate-pulse rounded-lg bg-muted" />
+              </div>
+            </div>
+          </div>
+        ) : messages.length === 0 ? (
           <WelcomeScreen onPromptClick={handlePromptClick} />
         ) : (
           <div className="mx-auto max-w-3xl space-y-6 p-4 pb-32">

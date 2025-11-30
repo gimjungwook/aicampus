@@ -13,6 +13,7 @@ interface ConversationListProps {
   onDelete: (id: string) => Promise<void>
   onClose?: () => void
   isCreating?: boolean
+  isLoading?: boolean
 }
 
 export function ConversationList({
@@ -23,6 +24,7 @@ export function ConversationList({
   onDelete,
   onClose,
   isCreating = false,
+  isLoading = false,
 }: ConversationListProps) {
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null)
@@ -97,7 +99,21 @@ export function ConversationList({
 
       {/* 대화 목록 */}
       <div className="flex-1 overflow-y-auto px-2 pb-4">
-        {conversations.length === 0 ? (
+        {isLoading ? (
+          <div className="space-y-2 px-1">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div
+                key={i}
+                className="flex items-center gap-3 rounded-xl px-3 py-2.5"
+              >
+                <div className="h-4 w-4 animate-pulse rounded bg-muted" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : conversations.length === 0 ? (
           <div className="flex flex-col items-center justify-center px-4 py-12 text-center">
             <div className="mb-3 rounded-full bg-muted p-3">
               <MessageSquare className="h-6 w-6 text-muted-foreground/50" />

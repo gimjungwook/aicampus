@@ -22,6 +22,7 @@ export default function SandboxPage() {
   const [conversations, setConversations] = useState<ConversationWithPreview[]>([])
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [isCreating, setIsCreating] = useState(false)
+  const [isLoadingConversations, setIsLoadingConversations] = useState(true)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
@@ -64,13 +65,10 @@ export default function SandboxPage() {
     if (!user) return
 
     const loadConversations = async () => {
+      setIsLoadingConversations(true)
       const data = await getConversations()
       setConversations(data)
-
-      // 첫 번째 대화 자동 선택 (옵션 - 빈 상태로 시작하려면 주석 처리)
-      // if (data.length > 0 && !selectedId) {
-      //   setSelectedId(data[0].id)
-      // }
+      setIsLoadingConversations(false)
     }
 
     loadConversations()
@@ -148,6 +146,7 @@ export default function SandboxPage() {
             onDelete={handleDelete}
             onClose={() => setIsSidebarOpen(false)}
             isCreating={isCreating}
+            isLoading={isLoadingConversations}
           />
         </aside>
 
@@ -197,6 +196,7 @@ export default function SandboxPage() {
             onSend={handleSend}
             onStop={stopStreaming}
             isLoading={isLoading || isCreating}
+            isLoadingMessages={isLoading && !!selectedId}
             isStreaming={isStreaming}
             usage={usage}
             placeholder={selectedId ? "AI에게 무엇이든 물어보세요..." : "메시지를 입력하면 새 대화가 시작됩니다..."}
