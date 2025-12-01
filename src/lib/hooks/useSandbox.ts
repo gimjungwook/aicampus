@@ -6,7 +6,6 @@ import type { Message as UIMessage } from '@/lib/types/lesson'
 import {
   getMessages,
   saveMessage,
-  getIndependentSandboxUsage,
   updateConversationTitle,
 } from '@/lib/actions/sandbox'
 
@@ -21,6 +20,21 @@ export function useSandbox({ conversationId }: UseSandboxOptions) {
   const [usage, setUsage] = useState<SandboxUsage>({ count: 0, limit: 20, resetAt: '' })
   const abortControllerRef = useRef<AbortController | null>(null)
   const skipLoadRef = useRef(false)
+
+  const fetchUsage = useCallback(async () => {
+    try {
+      const res = await fetch('/api/chat')
+      if (res.ok) {
+        const data = await res.json()
+        setUsage(data)
+        return data as SandboxUsage
+      }
+      // 429 응답은 상위에서 처리
+    } catch {
+      // 네트워크 오류 시 이전 값을 유지
+    }
+    return null
+  }, [])
 
   // 대화 변경 시 메시지 로드
   useEffect(() => {
@@ -54,18 +68,20 @@ export function useSandbox({ conversationId }: UseSandboxOptions) {
 
   // 사용량 로드
   useEffect(() => {
-    const loadUsage = async () => {
-      const data = await getIndependentSandboxUsage()
-      setUsage(data)
-    }
-    loadUsage()
-  }, [])
+    fetchUsage()
+  }, [fetchUsage])
 
   const sendMessage = useCallback(
     async (content: string, overrideConversationId?: string) => {
       const targetConversationId = overrideConversationId || conversationId
       if (!targetConversationId || !content.trim() || isStreaming) return
-      if (usage.count >= usage.limit) return
+
+      const latestUsage = await fetchUsage()
+      const effectiveUsage = latestUsage || usage
+      if (effectiveUsage.count >= effectiveUsage.limit) {
+        setUsage(effectiveUsage)
+        return
+      }
 
       // 새 대화 생성 직후 첫 메시지 전송 시 로드 스킵 플래그 설정
       if (overrideConversationId) {
@@ -122,6 +138,15 @@ export function useSandbox({ conversationId }: UseSandboxOptions) {
         })
 
         if (!response.ok) {
+          if (response.status === 429) {
+            const data = await response.json()
+            setUsage((prev) => ({
+              count: data?.count ?? prev.count,
+              limit: data?.limit ?? prev.limit,
+              resetAt: data?.resetAt ?? prev.resetAt,
+            }))
+            throw new Error(data?.error || '오늘 사용량을 모두 소진했습니다.')
+          }
           throw new Error('응답을 받을 수 없습니다')
         }
 
@@ -181,8 +206,8 @@ export function useSandbox({ conversationId }: UseSandboxOptions) {
           await saveMessage(targetConversationId, 'assistant', fullContent)
         }
 
-        // 사용량 업데이트
-        setUsage((prev) => ({ ...prev, count: prev.count + 1 }))
+        // 사용량 업데이트 (서버 값 기준으로 동기화)
+        await fetchUsage()
       } catch (error) {
         if ((error as Error).name === 'AbortError') {
           // 사용자가 중단함
