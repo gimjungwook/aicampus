@@ -113,7 +113,7 @@ export default function Home() {
                 드립니다.
               </p>
               <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
-                <Link href="/sandbox">
+                <Link href="/login?next=/sandbox">
                   <Button size="xl">무료 체험 시작</Button>
                 </Link>
                 <Link href="/courses">
@@ -135,9 +135,9 @@ export default function Home() {
 
             <div className="flex-1">
               <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card shadow-xl">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-emerald-200/10" />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-white to-emerald-100/20" />
                 <div className="relative space-y-4 p-6">
-                  <div className="flex items-center gap-3 rounded-2xl bg-background/80 p-4 shadow-sm ring-1 ring-border/70">
+                  <div className="flex items-center gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-border/60">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                       <Sparkles className="h-6 w-6" />
                     </div>
@@ -150,20 +150,20 @@ export default function Home() {
                       </p>
                     </div>
                   </div>
-                  <div className="rounded-2xl bg-background/85 p-5 shadow-sm ring-1 ring-border/70">
-                    <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-border/60">
+                    <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-600">
                       <span className="h-2 w-2 rounded-full bg-emerald-400" />
                       샌드박스 체험 중
                     </div>
-                    <div className="space-y-3 text-sm leading-relaxed text-foreground">
-                      <p className="rounded-xl bg-muted/80 p-3 text-slate-900">
+                    <div className="space-y-3 text-sm leading-relaxed text-slate-900">
+                      <p className="rounded-xl bg-slate-50 p-3">
                         ✅ 엑셀 데이터 200행 → 요약 보고서 1페이지
                       </p>
-                      <p className="rounded-xl bg-primary/10 p-3 text-slate-900">
+                      <p className="rounded-xl bg-emerald-50 p-3">
                         ⚡ 반복 작업을 매크로로 변환해 자동화 스크립트를
                         생성했습니다. 1시간 걸리던 작업이 8분으로 단축됩니다.
                       </p>
-                      <p className="rounded-xl bg-muted/80 p-3 text-slate-900">
+                      <p className="rounded-xl bg-slate-50 p-3">
                         💡 더 개선할까요? “보고서 톤을 임원 보고용으로
                         변경”이라고 요청해보세요.
                       </p>
