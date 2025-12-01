@@ -72,12 +72,12 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * 다음 경로를 제외한 모든 요청에 대해 미들웨어 실행:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public 폴더 파일들
+     * 보호 라우트에 대해서만 미들웨어 실행:
+     * - lesson/*
+     * - sandbox/*
+     * - mypage/*
+     * - admin/*
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/(lesson|sandbox|mypage|admin)(.*)',
   ],
 }

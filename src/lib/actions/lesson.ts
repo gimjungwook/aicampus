@@ -76,13 +76,13 @@ export async function getLessonContext(lessonId: string): Promise<LessonContext 
     redirect(`/courses/${course.id}`)
   }
 
-  // 3. 코스의 모든 모듈과 레슨 가져오기
+  // 3. 코스의 모든 모듈과 레슨 가져오기 (이전/다음 레슨 정보를 위한 필드 포함)
   const { data: modules, error: modulesError } = await supabase
     .from('modules')
     .select(`
       id,
       order_index,
-      lessons(id, order_index)
+      lessons(id, title, description, order_index)
     `)
     .eq('course_id', course.id)
     .order('order_index')
@@ -117,26 +117,15 @@ export async function getLessonContext(lessonId: string): Promise<LessonContext 
   const prevLessonInfo = currentIndex > 0 ? allLessons[currentIndex - 1] : null
   const nextLessonInfo = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null
 
-  let prevLesson: Lesson | null = null
-  let nextLesson: Lesson | null = null
+  const lessonLookup = new Map<string, Lesson>()
+  modules.forEach((mod) => {
+    (mod.lessons as Lesson[]).forEach((lesson) => {
+      lessonLookup.set(lesson.id, lesson as Lesson)
+    })
+  })
 
-  if (prevLessonInfo) {
-    const { data } = await supabase
-      .from('lessons')
-      .select('*')
-      .eq('id', prevLessonInfo.id)
-      .single()
-    prevLesson = data
-  }
-
-  if (nextLessonInfo) {
-    const { data } = await supabase
-      .from('lessons')
-      .select('*')
-      .eq('id', nextLessonInfo.id)
-      .single()
-    nextLesson = data
-  }
+  const prevLesson = prevLessonInfo ? lessonLookup.get(prevLessonInfo.id) || null : null
+  const nextLesson = nextLessonInfo ? lessonLookup.get(nextLessonInfo.id) || null : null
 
   return {
     lesson: lesson as LessonWithDetails,

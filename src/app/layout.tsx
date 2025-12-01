@@ -1,19 +1,7 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import { Geist_Mono } from 'next/font/google'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import './globals.css'
-
-const inter = Inter({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-})
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -46,7 +34,7 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
       </head>
-      <body className={`${inter.variable} ${geistMono.variable} antialiased min-h-screen`}>
+      <body className="antialiased min-h-screen">
         <ThemeProvider>
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>

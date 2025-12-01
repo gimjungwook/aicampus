@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { checkAdminRole } from '@/lib/utils/admin'
 import { revalidatePath } from 'next/cache'
 import type {
@@ -22,7 +23,7 @@ async function requireAdminAction() {
   if (!(await checkAdminRole())) {
     throw new Error('Unauthorized')
   }
-  return await createClient()
+  return createAdminClient()
 }
 
 // ============ DASHBOARD ============

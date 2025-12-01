@@ -7,11 +7,6 @@ import { ConversationList } from '@/components/sandbox/ConversationList'
 import { ChatInterface } from '@/components/sandbox/ChatInterface'
 import { useSandbox } from '@/lib/hooks/useSandbox'
 import { useAuth } from '@/components/auth/AuthProvider'
-import {
-  getConversations,
-  createConversation,
-  deleteConversation,
-} from '@/lib/actions/sandbox'
 import type { ConversationWithPreview } from '@/lib/types/sandbox'
 import { Menu, X, PanelLeft } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
@@ -40,12 +35,18 @@ export default function SandboxPage() {
     // 선택된 대화가 없으면 새로 생성
     if (!selectedId) {
       setIsCreating(true)
-      const conversation = await createConversation()
-      if (conversation) {
+      try {
+        const res = await fetch('/api/sandbox/conversations', { method: 'POST' })
+        if (!res.ok) {
+          throw new Error('대화를 생성하지 못했습니다.')
+        }
+        const conversation = await res.json()
         setConversations((prev) => [conversation, ...prev])
         setSelectedId(conversation.id)
         // conversationId를 직접 전달하여 클로저 문제 해결
         sendMessage(message, conversation.id)
+      } catch (error) {
+        console.error(error)
       }
       setIsCreating(false)
     } else {
@@ -66,9 +67,18 @@ export default function SandboxPage() {
 
     const loadConversations = async () => {
       setIsLoadingConversations(true)
-      const data = await getConversations()
-      setConversations(data)
-      setIsLoadingConversations(false)
+      try {
+        const res = await fetch('/api/sandbox/conversations')
+        if (!res.ok) {
+          throw new Error('대화를 불러오지 못했습니다.')
+        }
+        const data = await res.json()
+        setConversations(data)
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setIsLoadingConversations(false)
+      }
     }
 
     loadConversations()
@@ -76,13 +86,16 @@ export default function SandboxPage() {
 
   // 대화 삭제
   const handleDelete = async (id: string) => {
-    const success = await deleteConversation(id)
-    if (success) {
+    try {
+      const res = await fetch(`/api/sandbox/conversations/${id}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error('대화를 삭제하지 못했습니다.')
       setConversations((prev) => prev.filter((c) => c.id !== id))
       if (selectedId === id) {
         const remaining = conversations.filter((c) => c.id !== id)
         setSelectedId(remaining.length > 0 ? remaining[0].id : null)
       }
+    } catch (error) {
+      console.error(error)
     }
   }
 

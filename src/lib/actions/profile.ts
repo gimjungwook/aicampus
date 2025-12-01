@@ -109,15 +109,21 @@ export async function uploadAvatar(formData: FormData): Promise<{ success: boole
   }
 
   // 공개 URL 가져오기
-  const { data: { publicUrl } } = supabase.storage
+  // 서명 URL로 제공 (기간 제한)
+  const { data: signedData, error: signedError } = await supabase.storage
     .from('avatars')
-    .getPublicUrl(fileName)
+    .createSignedUrl(fileName, 60 * 60 * 24 * 7) // 7일
+
+  if (signedError || !signedData?.signedUrl) {
+    console.error('Error creating signed url:', signedError)
+    return { success: false, error: '프로필 이미지를 불러올 수 없습니다' }
+  }
 
   // 프로필 업데이트
   const { error: updateError } = await supabase
     .from('profiles')
     .update({
-      avatar_url: publicUrl,
+      avatar_url: signedData.signedUrl,
       updated_at: new Date().toISOString(),
     })
     .eq('id', user.id)
@@ -128,7 +134,7 @@ export async function uploadAvatar(formData: FormData): Promise<{ success: boole
   }
 
   revalidatePath('/mypage')
-  return { success: true, url: publicUrl }
+  return { success: true, url: signedData.signedUrl }
 }
 
 // 계정 삭제

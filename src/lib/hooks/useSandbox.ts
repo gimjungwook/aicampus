@@ -1,13 +1,8 @@
 'use client'
 
 import { useState, useCallback, useRef, useEffect } from 'react'
-import type { Message as DBMessage, SandboxUsage } from '@/lib/types/sandbox'
+import type { SandboxUsage } from '@/lib/types/sandbox'
 import type { Message as UIMessage } from '@/lib/types/lesson'
-import {
-  getMessages,
-  saveMessage,
-  updateConversationTitle,
-} from '@/lib/actions/sandbox'
 
 interface UseSandboxOptions {
   conversationId: string | null
@@ -51,16 +46,25 @@ export function useSandbox({ conversationId }: UseSandboxOptions) {
 
     const loadMessages = async () => {
       setIsLoading(true)
-      const dbMessages = await getMessages(conversationId)
-      setMessages(
-        dbMessages.map((m) => ({
-          id: m.id,
-          role: m.role,
-          content: m.content,
-          timestamp: new Date(m.created_at).getTime(),
-        }))
-      )
-      setIsLoading(false)
+      try {
+        const res = await fetch(`/api/sandbox/messages?conversationId=${conversationId}`)
+        if (!res.ok) {
+          throw new Error('메시지를 불러오지 못했습니다.')
+        }
+        const dbMessages = await res.json()
+        setMessages(
+          dbMessages.map((m: { id: string; role: 'user' | 'assistant'; content: string; created_at: string }) => ({
+            id: m.id,
+            role: m.role,
+            content: m.content,
+            timestamp: new Date(m.created_at).getTime(),
+          }))
+        )
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setIsLoading(false)
+      }
     }
 
     loadMessages()
@@ -99,8 +103,13 @@ export function useSandbox({ conversationId }: UseSandboxOptions) {
 
       // DB에 사용자 메시지 저장 (스트리밍과 병렬 처리)
       let userMessageSaved = false
-      const userMessagePromise = saveMessage(targetConversationId, 'user', content)
-        .then(() => {
+      const userMessagePromise = fetch('/api/sandbox/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ conversationId: targetConversationId, role: 'user', content }),
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error('Failed to save user message')
           userMessageSaved = true
         })
         .catch((error) => {
@@ -203,7 +212,11 @@ export function useSandbox({ conversationId }: UseSandboxOptions) {
           if (!userMessageSaved) {
             await userMessagePromise
           }
-          await saveMessage(targetConversationId, 'assistant', fullContent)
+          await fetch('/api/sandbox/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ conversationId: targetConversationId, role: 'assistant', content: fullContent }),
+          })
         }
 
         // 사용량 업데이트 (서버 값 기준으로 동기화)
@@ -263,7 +276,11 @@ async function generateTitle(conversationId: string, firstMessage: string) {
     if (response.ok) {
       const { title } = await response.json()
       if (title) {
-        await updateConversationTitle(conversationId, title)
+        await fetch(`/api/sandbox/conversations/${conversationId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title }),
+        })
       }
     }
   } catch {

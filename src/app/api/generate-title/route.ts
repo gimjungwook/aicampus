@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { createClient } from '@/lib/supabase/server'
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || '')
+const apiKey = process.env.GOOGLE_GEMINI_API_KEY
+const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null
 const INDEPENDENT_LIMIT = 20
 
 export async function POST(request: NextRequest) {
@@ -36,6 +37,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: '오늘 사용량을 모두 소진했습니다. 내일 다시 시도해주세요.', resetAt: getKSTMidnight() },
         { status: 429 }
+      )
+    }
+
+    if (!genAI) {
+      return NextResponse.json(
+        { error: 'AI 서비스 준비 중입니다. 잠시 후 다시 시도해주세요.' },
+        { status: 503 }
       )
     }
 

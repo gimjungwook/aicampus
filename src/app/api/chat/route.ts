@@ -2,7 +2,8 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || '')
+const apiKey = process.env.GOOGLE_GEMINI_API_KEY
+const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null
 
 // 사용량 제한
 const LESSON_LIMIT = 5 // 레슨당 일일 5회
@@ -86,6 +87,13 @@ export async function POST(request: NextRequest) {
           limit,
         },
         { status: 429 }
+      )
+    }
+
+    if (!genAI) {
+      return NextResponse.json(
+        { error: 'AI 서비스 준비 중입니다. 잠시 후 다시 시도해주세요.' },
+        { status: 503 }
       )
     }
 

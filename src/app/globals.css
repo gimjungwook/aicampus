@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 :root {
+  --font-geist-sans: 'Pretendard Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-geist-mono: 'SFMono-Regular', ui-monospace, 'Menlo', 'Consolas', monospace;
   /* Primary Colors - Duolingo Green */
   --primary: #58cc02;
   --primary-foreground: #ffffff;
