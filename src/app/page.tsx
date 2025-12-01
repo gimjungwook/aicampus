@@ -95,12 +95,8 @@ export default function Home() {
                 클릭 몇 번으로 끝내는 업무용 AI 학습
               </div>
               <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
-                <span className="block">
-                  “보고서 초안 <span className="text-primary">5분 완성</span>”
-                </span>
-                <span className="block">
-                  실습으로 끝내는 <span className="text-slate-900">AI Campus</span>
-                </span>
+                <span className="block">보고서 초안 <span className="text-primary">5분 완성</span></span>
+                <span className="block">실습으로 끝내는 AI Campus</span>
               </h1>
               <p className="text-lg text-muted-foreground sm:text-xl">
                 코딩 없이 바로 써먹는 실습 미션, 샌드박스 체험, 업무 자동화 템플릿까지.
@@ -136,23 +132,23 @@ export default function Home() {
                       <Sparkles className="h-6 w-6" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold">보고서 초안 생성</p>
-                      <p className="text-xs text-muted-foreground">“어제 회의록을 요약해 기획안으로 만들어줘”</p>
+                      <p className="text-sm font-semibold text-slate-900">보고서 초안 생성</p>
+                      <p className="text-xs text-slate-700">“어제 회의록을 요약해 기획안으로 만들어줘”</p>
                     </div>
                   </div>
-                  <div className="rounded-2xl bg-background/70 p-5 shadow-sm ring-1 ring-border/70">
+                  <div className="rounded-2xl bg-background/85 p-5 shadow-sm ring-1 ring-border/70">
                     <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                       <span className="h-2 w-2 rounded-full bg-emerald-400" />
                       샌드박스 체험 중
                     </div>
                     <div className="space-y-3 text-sm leading-relaxed text-foreground">
-                      <p className="rounded-xl bg-muted/80 p-3">
+                      <p className="rounded-xl bg-muted/80 p-3 text-slate-900">
                         ✅ 엑셀 데이터 200행 → 요약 보고서 1페이지
                       </p>
-                      <p className="rounded-xl bg-primary/10 p-3 text-primary-foreground/90">
+                      <p className="rounded-xl bg-primary/10 p-3 text-slate-900">
                         ⚡ 반복 작업을 매크로로 변환해 자동화 스크립트를 생성했습니다. 1시간 걸리던 작업이 8분으로 단축됩니다.
                       </p>
-                      <p className="rounded-xl bg-muted/80 p-3">
+                      <p className="rounded-xl bg-muted/80 p-3 text-slate-900">
                         💡 더 개선할까요? “보고서 톤을 임원 보고용으로 변경”이라고 요청해보세요.
                       </p>
                     </div>
