@@ -94,10 +94,13 @@ export default function Home() {
               <div className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-semibold text-primary shadow-sm ring-1 ring-primary/20">
                 클릭 몇 번으로 끝내는 업무용 AI 학습
               </div>
-              <h1 className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-                “보고서 초안 5분 완성”
-                <br />
-                실습으로 끝내는 AI Campus
+              <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+                <span className="block">
+                  “보고서 초안 <span className="text-primary">5분 완성</span>”
+                </span>
+                <span className="block">
+                  실습으로 끝내는 <span className="text-slate-900">AI Campus</span>
+                </span>
               </h1>
               <p className="text-lg text-muted-foreground sm:text-xl">
                 코딩 없이 바로 써먹는 실습 미션, 샌드박스 체험, 업무 자동화 템플릿까지.
@@ -115,7 +118,10 @@ export default function Home() {
               </div>
               <p className="text-sm text-muted-foreground">
                 이미 계정이 있으신가요?{' '}
-                <Link href="/login" className="font-semibold text-primary hover:underline">
+                <Link
+                  href="/login"
+                  className="font-semibold text-foreground/70 underline-offset-4 hover:text-primary hover:underline"
+                >
                   로그인
                 </Link>
               </p>
