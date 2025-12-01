@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import type { LessonContext, LessonWithDetails } from '@/lib/types/lesson'
 import type { Lesson, Module } from '@/lib/types/course'
+import { redirect } from 'next/navigation'
 
 // 레슨 상세 정보 가져오기
 export async function getLessonById(lessonId: string): Promise<LessonWithDetails | null> {
@@ -29,6 +30,10 @@ export async function getLessonById(lessonId: string): Promise<LessonWithDetails
 export async function getLessonContext(lessonId: string): Promise<LessonContext | null> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return null
+  }
 
   // 1. 현재 레슨 정보 가져오기
   const { data: lesson, error: lessonError } = await supabase
@@ -57,6 +62,18 @@ export async function getLessonContext(lessonId: string): Promise<LessonContext 
   if (courseError || !course) {
     console.error('Error fetching course:', courseError)
     return null
+  }
+
+  // 2-1. 해당 코스 수강 등록 여부 확인 (미등록 시 접근 차단)
+  const { data: enrollment } = await supabase
+    .from('user_enrollments')
+    .select('id')
+    .eq('user_id', user.id)
+    .eq('course_id', course.id)
+    .maybeSingle()
+
+  if (!enrollment) {
+    redirect(`/courses/${course.id}`)
   }
 
   // 3. 코스의 모든 모듈과 레슨 가져오기

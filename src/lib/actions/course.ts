@@ -66,6 +66,8 @@ export async function getCoursesWithProgress(
   // 코스 가져오기
   const courses = await getCourses(categorySlug)
 
+  if (courses.length === 0) return []
+
   if (!user) {
     // 비로그인 사용자: 진도 없이 반환
     return courses.map(course => ({
@@ -75,6 +77,8 @@ export async function getCoursesWithProgress(
       progressPercent: 0,
     }))
   }
+
+  const courseIds = courses.map((course) => course.id)
 
   // 사용자 수강 등록 정보 가져오기
   const { data: enrollments } = await supabase
@@ -91,26 +95,47 @@ export async function getCoursesWithProgress(
 
   const completedLessonIds = new Set(progress?.map(p => p.lesson_id) || [])
 
-  // 각 코스의 레슨 ID 가져오기 (진도 계산용)
-  const courseLessons = await Promise.all(
-    courses.map(async (course) => {
-      const { data: lessons } = await supabase
-        .from('lessons')
-        .select('id, module_id')
-        .in('module_id',
-          (await supabase
-            .from('modules')
-            .select('id')
-            .eq('course_id', course.id)
-          ).data?.map(m => m.id) || []
-        )
-      return { courseId: course.id, lessonIds: lessons?.map(l => l.id) || [] }
+  // 모든 모듈/레슨을 한 번에 가져와 N+1 및 빈 배열 .in() 오류 방지
+  const { data: modulesData, error: modulesError } = await supabase
+    .from('modules')
+    .select('id, course_id')
+    .in('course_id', courseIds)
+
+  if (modulesError) {
+    console.error('Error fetching modules:', modulesError)
+  }
+
+  const modulesByCourse = new Map<string, string[]>()
+  const moduleIds: string[] = []
+  modulesData?.forEach((m) => {
+    modulesByCourse.set(m.course_id, [...(modulesByCourse.get(m.course_id) || []), m.id])
+    moduleIds.push(m.id)
+  })
+
+  const lessonsByModule = new Map<string, string[]>()
+
+  if (moduleIds.length > 0) {
+    const { data: lessonsData, error: lessonsError } = await supabase
+      .from('lessons')
+      .select('id, module_id')
+      .in('module_id', moduleIds)
+
+    if (lessonsError) {
+      console.error('Error fetching lessons:', lessonsError)
+    }
+
+    lessonsData?.forEach((lesson) => {
+      lessonsByModule.set(
+        lesson.module_id,
+        [...(lessonsByModule.get(lesson.module_id) || []), lesson.id]
+      )
     })
-  )
+  }
 
   return courses.map(course => {
     const enrollment = enrollments?.find(e => e.course_id === course.id)
-    const lessonIds = courseLessons.find(cl => cl.courseId === course.id)?.lessonIds || []
+    const moduleIdsForCourse = modulesByCourse.get(course.id) || []
+    const lessonIds = moduleIdsForCourse.flatMap((id) => lessonsByModule.get(id) || [])
     const completedCount = lessonIds.filter(id => completedLessonIds.has(id)).length
     const total = course.total_lessons || lessonIds.length
 

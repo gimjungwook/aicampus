@@ -29,6 +29,33 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // 레슨이 지정된 경우 해당 코스 수강 등록 여부 확인
+    let lessonCourseId: string | null = null
+    if (lessonId) {
+      const { data: lessonRow, error: lessonError } = await supabase
+        .from('lessons')
+        .select('modules!inner(course_id)')
+        .eq('id', lessonId)
+        .single()
+
+      if (lessonError || !lessonRow) {
+        return NextResponse.json({ error: '레슨을 찾을 수 없습니다.' }, { status: 404 })
+      }
+
+      lessonCourseId = (lessonRow.modules as { course_id: string }).course_id
+
+      const { data: enrollment } = await supabase
+        .from('user_enrollments')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('course_id', lessonCourseId)
+        .maybeSingle()
+
+      if (!enrollment) {
+        return NextResponse.json({ error: '이 레슨에 접근할 수 없습니다.' }, { status: 403 })
+      }
+    }
+
     // 사용량 체크
     const today = new Date().toISOString().split('T')[0]
     const limit = lessonId ? LESSON_LIMIT : INDEPENDENT_LIMIT
@@ -119,46 +146,48 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// 사용량 증가 함수
+// 사용량 증가 함수 (동시성-safe RPC 우선, fallback은 select+update)
 async function incrementUsage(
   supabase: Awaited<ReturnType<typeof createClient>>,
   userId: string,
   lessonId: string | null,
   date: string
 ) {
-  // upsert로 사용량 증가
   const { error } = await supabase.rpc('increment_sandbox_usage', {
     p_user_id: userId,
     p_lesson_id: lessonId,
     p_usage_date: date,
   })
 
-  if (error) {
-    // RPC가 없으면 직접 upsert
+  if (!error) return
+
+  // Fallback: 기존 카운트 조회 후 +1 (동시성에선 RPC보다 약하지만 reset/double count는 방지)
+  const usageQuery = supabase
+    .from('sandbox_usage')
+    .select('id, count')
+    .eq('user_id', userId)
+    .eq('usage_date', date)
+
+  const { data: existing } = lessonId
+    ? await usageQuery.eq('lesson_id', lessonId).maybeSingle()
+    : await usageQuery.is('lesson_id', null).maybeSingle()
+
+  if (!existing) {
     await supabase
       .from('sandbox_usage')
-      .upsert(
-        {
-          user_id: userId,
-          lesson_id: lessonId,
-          usage_date: date,
-          count: 1,
-        },
-        {
-          onConflict: 'user_id,lesson_id,usage_date',
-        }
-      )
-      .select()
-      .single()
-      .then(async ({ data }) => {
-        if (data) {
-          await supabase
-            .from('sandbox_usage')
-            .update({ count: data.count + 1 })
-            .eq('id', data.id)
-        }
+      .insert({
+        user_id: userId,
+        lesson_id: lessonId,
+        usage_date: date,
+        count: 1,
       })
+    return
   }
+
+  await supabase
+    .from('sandbox_usage')
+    .update({ count: existing.count + 1 })
+    .eq('id', existing.id)
 }
 
 // KST 자정 시간 계산
