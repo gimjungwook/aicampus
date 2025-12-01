@@ -42,7 +42,12 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: '레슨을 찾을 수 없습니다.' }, { status: 404 })
       }
 
-      lessonCourseId = (lessonRow.modules as { course_id: string }).course_id
+      const modules = lessonRow.modules as { course_id: string }[] | null
+      const firstModule = Array.isArray(modules) ? modules[0] : modules
+      if (!firstModule?.course_id) {
+        return NextResponse.json({ error: '레슨을 찾을 수 없습니다.' }, { status: 404 })
+      }
+      lessonCourseId = firstModule.course_id
 
       const { data: enrollment } = await supabase
         .from('user_enrollments')
