@@ -6,11 +6,11 @@ import { LessonContent } from '@/components/lesson/LessonContent'
 import { getLessonContext, isLessonCompleted } from '@/lib/actions/lesson'
 
 interface LessonPageProps {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 export async function generateMetadata({ params }: LessonPageProps) {
-  const { id } = params
+  const { id } = await params
   const context = await getLessonContext(id)
 
   if (!context) {
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: LessonPageProps) {
 }
 
 export default async function LessonPage({ params }: LessonPageProps) {
-  const { id } = params
+  const { id } = await params
 
   if (!id) {
     notFound()
