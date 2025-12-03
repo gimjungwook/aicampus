@@ -93,13 +93,13 @@ export default function Home() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative overflow-hidden py-16 lg:py-24">
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,rgba(88,204,2,0.2),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(94,234,212,0.15),transparent_25%),radial-gradient(circle_at_50%_100%,rgba(104,117,245,0.12),transparent_35%)]" />
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,color-mix(in_srgb,var(--primary)_15%,transparent),transparent_35%),radial-gradient(circle_at_80%_0%,color-mix(in_srgb,var(--primary)_10%,transparent),transparent_25%),radial-gradient(circle_at_50%_100%,color-mix(in_srgb,var(--primary)_8%,transparent),transparent_35%)]" />
           <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 lg:flex-row lg:items-center lg:gap-16">
             <div className="flex-1 space-y-6 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-semibold text-primary shadow-sm ring-1 ring-primary/20">
                 클릭 몇 번으로 끝내는 업무용 AI 학습
               </div>
-              <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+              <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl">
                 <span className="block">
                   보고서 초안 <span className="text-primary">5분 완성</span>
                 </span>
@@ -122,50 +122,41 @@ export default function Home() {
                   </Button>
                 </Link>
               </div>
-              <p className="text-sm text-muted-foreground">
-                이미 계정이 있으신가요?{" "}
-                <Link
-                  href="/login"
-                  className="font-semibold text-foreground/70 underline-offset-4 hover:text-primary hover:underline"
-                >
-                  로그인
-                </Link>
-              </p>
             </div>
 
             <div className="flex-1">
               <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card shadow-xl">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-white to-emerald-100/20" />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-primary/5" />
                 <div className="relative space-y-4 p-6">
-                  <div className="flex items-center gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-border/60">
+                  <div className="flex items-center gap-3 rounded-2xl bg-background p-4 shadow-sm ring-1 ring-border/60">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                       <Sparkles className="h-6 w-6" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-slate-900">
+                      <p className="text-sm font-semibold text-foreground">
                         보고서 초안 생성
                       </p>
-                      <p className="text-xs text-slate-700">
-                        “어제 회의록을 요약해 기획안으로 만들어줘”
+                      <p className="text-xs text-muted-foreground">
+                        "어제 회의록을 요약해 기획안으로 만들어줘"
                       </p>
                     </div>
                   </div>
-                  <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-border/60">
-                    <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-600">
-                      <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                  <div className="rounded-2xl bg-background p-5 shadow-sm ring-1 ring-border/60">
+                    <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                      <span className="h-2 w-2 rounded-full bg-primary" />
                       샌드박스 체험 중
                     </div>
-                    <div className="space-y-3 text-sm leading-relaxed text-slate-900">
-                      <p className="rounded-xl bg-slate-50 p-3">
+                    <div className="space-y-3 text-sm leading-relaxed text-foreground">
+                      <p className="rounded-xl bg-muted p-3">
                         ✅ 엑셀 데이터 200행 → 요약 보고서 1페이지
                       </p>
-                      <p className="rounded-xl bg-emerald-50 p-3">
+                      <p className="rounded-xl bg-primary/10 p-3">
                         ⚡ 반복 작업을 매크로로 변환해 자동화 스크립트를
                         생성했습니다. 1시간 걸리던 작업이 8분으로 단축됩니다.
                       </p>
-                      <p className="rounded-xl bg-slate-50 p-3">
-                        💡 더 개선할까요? “보고서 톤을 임원 보고용으로
-                        변경”이라고 요청해보세요.
+                      <p className="rounded-xl bg-muted p-3">
+                        💡 더 개선할까요? "보고서 톤을 임원 보고용으로
+                        변경"이라고 요청해보세요.
                       </p>
                     </div>
                   </div>
@@ -260,7 +251,7 @@ export default function Home() {
                   key={sample.title}
                   className="group relative overflow-hidden rounded-2xl bg-card p-6 shadow-sm ring-1 ring-border/70 transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-emerald-100/10 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
                   <div className="relative flex h-full flex-col gap-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
                       <sample.icon className="h-6 w-6" />
