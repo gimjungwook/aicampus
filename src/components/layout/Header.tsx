@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils/cn'
 
 const navigation = [
   { name: '코스', href: '/courses' },
+  { name: '피드', href: '/feed' },
   { name: '샌드박스', href: '/sandbox' },
 ]
 

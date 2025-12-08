@@ -6,7 +6,7 @@ const protectedRoutes = ['/lesson', '/sandbox', '/mypage']
 // Admin 라우트 (로그인 필요, 역할 체크는 layout에서)
 const adminRoutes = ['/admin']
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   })
@@ -72,7 +72,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * 보호 라우트에 대해서만 미들웨어 실행:
+     * 보호 라우트에 대해서만 프록시 실행:
      * - lesson/*
      * - sandbox/*
      * - mypage/*

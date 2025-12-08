@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/Button";
+import { FeedPreview } from "@/components/feed";
+import { getNewsPosts } from "@/lib/actions/news";
 import {
   BookOpen,
   Target,
@@ -12,6 +14,7 @@ import {
   BarChart2,
   Rocket,
   MousePointerClick,
+  MessageSquare,
 } from "lucide-react";
 
 const featureHighlights = [
@@ -85,7 +88,10 @@ const howItWorks = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  // 최신 피드 5개 가져오기
+  const { posts: latestFeed } = await getNewsPosts({ limit: 5 })
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -310,6 +316,34 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Feed Section */}
+        {latestFeed.length > 0 && (
+          <section className="border-t bg-muted/30 py-16 lg:py-20">
+            <div className="mx-auto max-w-2xl px-4">
+              <div className="mb-6 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <MessageSquare className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold sm:text-2xl">피드</h2>
+                    <p className="text-sm text-muted-foreground">
+                      최신 AI 트렌드와 소식
+                    </p>
+                  </div>
+                </div>
+                <Link
+                  href="/feed"
+                  className="text-sm font-medium text-primary hover:underline"
+                >
+                  더 보기 →
+                </Link>
+              </div>
+              <FeedPreview posts={latestFeed} />
+            </div>
+          </section>
+        )}
 
         {/* Final CTA */}
         <section className="border-t py-16 lg:py-24">
