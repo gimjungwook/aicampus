@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Gemini API 호출 (스트리밍)
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' })
 
     // 대화 히스토리 구성
     const history = conversationHistory?.map((msg: { role: string; content: string }) => ({

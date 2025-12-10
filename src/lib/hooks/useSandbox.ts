@@ -31,6 +31,11 @@ export function useSandbox({ conversationId }: UseSandboxOptions) {
     return null
   }, [])
 
+  // 새 대화 생성 전 호출하여 로드 스킵 플래그 미리 설정
+  const prepareForNewConversation = useCallback(() => {
+    skipLoadRef.current = true
+  }, [])
+
   // 대화 변경 시 메시지 로드
   useEffect(() => {
     if (!conversationId) {
@@ -261,6 +266,7 @@ export function useSandbox({ conversationId }: UseSandboxOptions) {
     usage,
     sendMessage,
     stopStreaming,
+    prepareForNewConversation,
   }
 }
 

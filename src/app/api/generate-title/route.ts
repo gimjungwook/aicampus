@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' })
 
     const prompt = `다음 사용자 메시지를 보고, 이 대화에 적합한 짧은 제목을 생성해주세요.
 제목은 10자 이내로 간결하게 작성하고, 따옴표나 다른 부연 설명 없이 제목만 출력하세요.

@@ -22,7 +22,7 @@ export default function SandboxPage() {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
 
-  const { messages, isLoading, isStreaming, usage, sendMessage, stopStreaming } =
+  const { messages, isLoading, isStreaming, usage, sendMessage, stopStreaming, prepareForNewConversation } =
     useSandbox({ conversationId: selectedId })
 
   // 메시지 전송 핸들러 (대화 없으면 자동 생성)
@@ -42,6 +42,8 @@ export default function SandboxPage() {
         }
         const conversation = await res.json()
         setConversations((prev) => [conversation, ...prev])
+        // useEffect가 실행되기 전에 로드 스킵 플래그 설정
+        prepareForNewConversation()
         setSelectedId(conversation.id)
         // conversationId를 직접 전달하여 클로저 문제 해결
         sendMessage(message, conversation.id)
@@ -52,7 +54,7 @@ export default function SandboxPage() {
     } else {
       sendMessage(message)
     }
-  }, [inputValue, sendMessage, selectedId])
+  }, [inputValue, sendMessage, selectedId, prepareForNewConversation])
 
   // 로그인 확인
   useEffect(() => {
