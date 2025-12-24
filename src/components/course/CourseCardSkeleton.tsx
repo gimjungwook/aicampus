@@ -12,8 +12,8 @@ export function CourseCardSkeleton({ className }: CourseCardSkeletonProps) {
         className
       )}
     >
-      {/* 썸네일 스켈레톤 - 4:5 비율 */}
-      <div className="relative aspect-[4/5] animate-pulse rounded-2xl bg-muted">
+      {/* 썸네일 스켈레톤 - 16:9 비율 */}
+      <div className="relative aspect-video animate-pulse rounded-2xl bg-muted">
         {/* 상단 뱃지 스켈레톤 */}
         <div className="absolute left-3 top-3 h-7 w-20 rounded-lg bg-muted-foreground/20" />
         {/* 상단 북마크 스켈레톤 */}
