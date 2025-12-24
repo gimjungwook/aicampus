@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState, useTransition } from 'react'
-import { FeedCard } from './FeedCard'
+import { useEffect, useState, useTransition, useRef, useCallback } from 'react'
+import { FeedCard, FeedCardSkeleton } from './FeedCard'
 import { getNewsPosts } from '@/lib/actions/news'
 import type { NewsPostWithDetails, NewsTag } from '@/lib/types/news'
-import { Loader2 } from 'lucide-react'
+import { Loader2, FileText } from 'lucide-react'
 
 interface FeedListProps {
   initialPosts: NewsPostWithDetails[]
@@ -18,6 +18,11 @@ export function FeedList({ initialPosts, initialHasMore, tags, selectedTag }: Fe
   const [hasMore, setHasMore] = useState(initialHasMore)
   const [isPending, startTransition] = useTransition()
   const [activeTag, setActiveTag] = useState(selectedTag || '')
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+
+  // Intersection Observer를 위한 ref
+  const observerRef = useRef<IntersectionObserver | null>(null)
+  const loadMoreRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setPosts(initialPosts)
@@ -25,7 +30,11 @@ export function FeedList({ initialPosts, initialHasMore, tags, selectedTag }: Fe
     setActiveTag(selectedTag || '')
   }, [initialPosts, initialHasMore, selectedTag])
 
-  const loadMore = () => {
+  // 무한 스크롤을 위한 Intersection Observer
+  const loadMore = useCallback(() => {
+    if (isLoadingMore || !hasMore) return
+
+    setIsLoadingMore(true)
     startTransition(async () => {
       const result = await getNewsPosts({
         tag: activeTag || undefined,
@@ -34,8 +43,35 @@ export function FeedList({ initialPosts, initialHasMore, tags, selectedTag }: Fe
       })
       setPosts(prev => [...prev, ...result.posts])
       setHasMore(result.hasMore)
+      setIsLoadingMore(false)
     })
-  }
+  }, [activeTag, posts.length, hasMore, isLoadingMore])
+
+  // Intersection Observer 설정
+  useEffect(() => {
+    if (observerRef.current) {
+      observerRef.current.disconnect()
+    }
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isLoadingMore) {
+          loadMore()
+        }
+      },
+      { threshold: 0.1, rootMargin: '100px' }
+    )
+
+    if (loadMoreRef.current) {
+      observerRef.current.observe(loadMoreRef.current)
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect()
+      }
+    }
+  }, [hasMore, isLoadingMore, loadMore])
 
   const handleTagChange = (tag: string) => {
     const url = tag ? `/feed?tag=${tag}` : '/feed'
@@ -55,14 +91,14 @@ export function FeedList({ initialPosts, initialHasMore, tags, selectedTag }: Fe
   return (
     <div className="max-w-xl mx-auto">
       {/* 태그 필터 */}
-      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-        <div className="flex gap-1 px-4 py-3 overflow-x-auto scrollbar-hide">
+      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 border-b border-border">
+        <div className="flex gap-2 px-4 py-3 overflow-x-auto scrollbar-hide">
           <button
             onClick={() => handleTagChange('')}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+            className={`px-3.5 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
               !activeTag
-                ? 'bg-foreground text-background'
-                : 'bg-muted hover:bg-muted/80 text-foreground'
+                ? 'bg-foreground text-background shadow-sm'
+                : 'bg-muted/80 hover:bg-muted text-foreground'
             }`}
           >
             전체
@@ -71,10 +107,10 @@ export function FeedList({ initialPosts, initialHasMore, tags, selectedTag }: Fe
             <button
               key={tag.id}
               onClick={() => handleTagChange(tag.slug)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+              className={`px-3.5 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
                 activeTag === tag.slug
-                  ? 'bg-foreground text-background'
-                  : 'bg-muted hover:bg-muted/80 text-foreground'
+                  ? 'bg-foreground text-background shadow-sm'
+                  : 'bg-muted/80 hover:bg-muted text-foreground'
               }`}
             >
               {tag.name}
@@ -83,33 +119,72 @@ export function FeedList({ initialPosts, initialHasMore, tags, selectedTag }: Fe
         </div>
       </div>
 
-      {/* 피드 목록 */}
-      <div className="divide-y-0">
-        {posts.length === 0 ? (
-          <div className="py-20 text-center text-muted-foreground">
-            <p>아직 피드가 없습니다.</p>
+      {/* 로딩 상태 (태그 변경 시) */}
+      {isPending && posts.length === 0 ? (
+        <div className="divide-y-0">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <FeedCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : posts.length === 0 ? (
+        /* 빈 상태 */
+        <div className="py-20 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted/50 mb-4">
+            <FileText className="w-8 h-8 text-muted-foreground" />
           </div>
-        ) : (
-          posts.map(post => <FeedCard key={post.id} post={post} />)
-        )}
+          <p className="text-muted-foreground font-medium">아직 피드가 없습니다</p>
+          <p className="text-muted-foreground/70 text-sm mt-1">첫 번째 글을 작성해보세요</p>
+        </div>
+      ) : (
+        /* 피드 목록 */
+        <>
+          <div className="divide-y-0">
+            {posts.map(post => (
+              <FeedCard key={post.id} post={post} />
+            ))}
+          </div>
+
+          {/* 무한 스크롤 트리거 & 로딩 인디케이터 */}
+          <div ref={loadMoreRef} className="py-8">
+            {isLoadingMore && (
+              <div className="flex justify-center">
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              </div>
+            )}
+            {!hasMore && posts.length > 0 && (
+              <p className="text-center text-sm text-muted-foreground">
+                모든 피드를 확인했습니다
+              </p>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+// 피드 목록 스켈레톤 (초기 로딩용)
+export function FeedListSkeleton() {
+  return (
+    <div className="max-w-xl mx-auto">
+      {/* 태그 필터 스켈레톤 */}
+      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
+        <div className="flex gap-2 px-4 py-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-8 w-16 rounded-full bg-muted animate-pulse"
+            />
+          ))}
+        </div>
       </div>
 
-      {/* 더보기 버튼 */}
-      {hasMore && (
-        <div className="py-8 text-center">
-          <button
-            onClick={loadMore}
-            disabled={isPending}
-            className="px-6 py-2 rounded-full bg-muted hover:bg-muted/80 text-foreground text-sm font-medium transition-colors disabled:opacity-50"
-          >
-            {isPending ? (
-              <Loader2 className="h-4 w-4 animate-spin mx-auto" />
-            ) : (
-              '더 보기'
-            )}
-          </button>
-        </div>
-      )}
+      {/* 피드 카드 스켈레톤 */}
+      <div className="divide-y-0">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <FeedCardSkeleton key={i} />
+        ))}
+      </div>
     </div>
   )
 }

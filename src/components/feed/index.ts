@@ -1,3 +1,3 @@
-export { FeedCard } from './FeedCard'
-export { FeedList } from './FeedList'
+export { FeedCard, FeedCardSkeleton } from './FeedCard'
+export { FeedList, FeedListSkeleton } from './FeedList'
 export { FeedPreview } from './FeedPreview'
