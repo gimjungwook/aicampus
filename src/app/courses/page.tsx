@@ -1,4 +1,5 @@
 import { getCategories, getCoursesWithProgress } from '@/lib/actions/course'
+import { getActiveBanners } from '@/lib/actions/banner'
 import { CoursesPageClient } from '@/components/course/CoursesPageClient'
 
 export const metadata = {
@@ -7,10 +8,23 @@ export const metadata = {
 }
 
 export default async function CoursesPage() {
-  const [categories, courses] = await Promise.all([
+  const [categories, courses, banners] = await Promise.all([
     getCategories(),
     getCoursesWithProgress(),
+    getActiveBanners(),
   ])
 
-  return <CoursesPageClient categories={categories} courses={courses} />
+  // BEST와 NEW 코스 분리
+  const popularCourses = courses.filter(c => c.is_best).slice(0, 8)
+  const newCourses = courses.filter(c => c.is_new).slice(0, 8)
+
+  return (
+    <CoursesPageClient
+      categories={categories}
+      courses={courses}
+      banners={banners}
+      popularCourses={popularCourses}
+      newCourses={newCourses}
+    />
+  )
 }

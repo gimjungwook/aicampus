@@ -38,6 +38,38 @@
 
   /* Radius */
   --radius: 0.75rem;
+
+  /* Badge colors */
+  --badge-best-bg: #eef7ff;
+  --badge-best-text: #077bff;
+  --badge-new-bg: #fef7ec;
+  --badge-new-text: #ffb600;
+  --badge-hot-bg: #ffeef1;
+  --badge-hot-text: #ff0746;
+  --badge-plus-bg: #ffffff;
+  --badge-plus-text: #000000;
+  --badge-article-bg: #5a5264;
+  --badge-article-text: #b8b8b8;
+
+  /* Filter button */
+  --filter-selected-bg: #000000;
+  --filter-selected-text: #ffffff;
+  --filter-default-bg: #f5f5f6;
+  --filter-default-text: #757678;
+
+  /* Search bar */
+  --search-bg: #f2f2f2;
+  --search-border: #e7e7e7;
+  --search-placeholder: #90979f;
+
+  /* Card extended */
+  --card-border: #e4e4e4;
+  --card-meta: #8d8d8d;
+  --card-rating: #777777;
+
+  /* Section */
+  --section-subtitle: #757678;
+  --more-button-bg: #f2f2f2;
 }
 
 .dark {
@@ -73,6 +105,38 @@
 
   /* Ring (focus) */
   --ring: #58cc02;
+
+  /* Badge colors (dark) */
+  --badge-best-bg: #1a2a3a;
+  --badge-best-text: #4da3ff;
+  --badge-new-bg: #2a2510;
+  --badge-new-text: #ffc940;
+  --badge-hot-bg: #2a1015;
+  --badge-hot-text: #ff4d6a;
+  --badge-plus-bg: #ffffff;
+  --badge-plus-text: #000000;
+  --badge-article-bg: #3d3847;
+  --badge-article-text: #a0a0a0;
+
+  /* Filter button (dark) */
+  --filter-selected-bg: #ffffff;
+  --filter-selected-text: #000000;
+  --filter-default-bg: #2d3f4a;
+  --filter-default-text: #8b9da8;
+
+  /* Search bar (dark) */
+  --search-bg: #1a2c35;
+  --search-border: #2d3f4a;
+  --search-placeholder: #6b7c87;
+
+  /* Card extended (dark) */
+  --card-border: #2d3f4a;
+  --card-meta: #6b7c87;
+  --card-rating: #8b9da8;
+
+  /* Section (dark) */
+  --section-subtitle: #8b9da8;
+  --more-button-bg: #1a2c35;
 }
 
 @theme inline {

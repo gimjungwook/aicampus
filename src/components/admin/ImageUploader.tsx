@@ -11,6 +11,7 @@ interface ImageUploaderProps {
   onChange: (url: string | null) => void
   folder?: string
   className?: string
+  aspectRatio?: 'video' | 'banner' | 'square'
 }
 
 export function ImageUploader({
@@ -18,7 +19,13 @@ export function ImageUploader({
   onChange,
   folder = 'images',
   className,
+  aspectRatio = 'video',
 }: ImageUploaderProps) {
+  const aspectClasses = {
+    video: 'aspect-video',
+    banner: 'aspect-[5/1]',
+    square: 'aspect-square',
+  }
   const [isUploading, setIsUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -71,8 +78,8 @@ export function ImageUploader({
   return (
     <div className={className}>
       {value ? (
-        <div className="relative inline-block">
-          <div className="relative aspect-video w-64 overflow-hidden rounded-lg border border-border">
+        <div className="relative inline-block w-full max-w-md">
+          <div className={`relative ${aspectClasses[aspectRatio]} w-full overflow-hidden rounded-lg border border-border`}>
             <Image
               src={value}
               alt="업로드된 이미지"
@@ -93,7 +100,7 @@ export function ImageUploader({
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={isUploading}
-          className="flex h-32 w-64 flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border hover:border-primary hover:bg-muted/50 transition-colors disabled:opacity-50"
+          className={`flex ${aspectClasses[aspectRatio]} w-full max-w-md flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border hover:border-primary hover:bg-muted/50 transition-colors disabled:opacity-50`}
         >
           {isUploading ? (
             <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />

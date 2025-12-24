@@ -8,6 +8,7 @@ import {
   BookOpen,
   Tags,
   ChevronLeft,
+  Image,
 } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 
@@ -26,6 +27,11 @@ const navItems = [
     label: '코스',
     href: '/admin/courses',
     icon: BookOpen,
+  },
+  {
+    label: '배너',
+    href: '/admin/banners',
+    icon: Image,
   },
 ]
 
