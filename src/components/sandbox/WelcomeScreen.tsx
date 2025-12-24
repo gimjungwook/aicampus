@@ -36,7 +36,7 @@ export function WelcomeScreen({ onPromptClick }: WelcomeScreenProps) {
     <div className="flex h-full flex-col items-center justify-center px-4">
       {/* 로고 및 인사말 */}
       <div className="mb-8 text-center">
-        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 shadow-lg shadow-primary/10">
+        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded bg-gradient-to-br from-primary/20 to-primary/5 shadow-lg shadow-primary/10">
           <Sparkles className="h-8 w-8 text-primary" />
         </div>
         <h1 className="mb-2 text-2xl font-bold text-foreground">
@@ -57,12 +57,12 @@ export function WelcomeScreen({ onPromptClick }: WelcomeScreenProps) {
             key={index}
             onClick={() => onPromptClick?.(item.prompt)}
             className={cn(
-              'group flex w-full items-center gap-4 rounded-xl border border-border bg-card p-4',
+              'group flex w-full items-center gap-4 rounded border border-border bg-card p-4',
               'transition-all duration-200',
               'hover:border-primary/30 hover:bg-primary/5 hover:shadow-md'
             )}
           >
-            <div className={cn('rounded-lg p-2.5', item.bg)}>
+            <div className={cn('rounded p-2.5', item.bg)}>
               <item.icon className={cn('h-5 w-5', item.color)} />
             </div>
             <div className="flex-1 text-left">

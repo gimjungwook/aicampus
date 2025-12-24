@@ -168,11 +168,11 @@ export default function BannersPage() {
         {isLoading ? (
           <div className="space-y-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-20 animate-pulse rounded-lg bg-muted" />
+              <div key={i} className="h-20 animate-pulse rounded bg-muted" />
             ))}
           </div>
         ) : banners.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-12">
+          <div className="flex flex-col items-center justify-center rounded border border-dashed border-border py-12">
             <p className="text-muted-foreground">아직 배너가 없습니다</p>
             <Button variant="outline" className="mt-4" onClick={() => openModal()}>
               첫 배너 만들기
@@ -188,7 +188,7 @@ export default function BannersPage() {
                 <div className="flex items-center gap-4">
                   {/* 미리보기 박스 */}
                   <div
-                    className="h-12 w-20 rounded-lg flex items-center justify-center text-white text-xs"
+                    className="h-12 w-20 rounded flex items-center justify-center text-white text-xs"
                     style={{ backgroundColor: banner.gradient_color }}
                   >
                     {banner.badge_text}
@@ -252,7 +252,7 @@ export default function BannersPage() {
                 placeholder={"AI 개발자,\n**비전공자**도 가능할까?"}
                 required
                 rows={3}
-                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                className="w-full rounded border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
               />
               <p className="text-xs text-muted-foreground mt-1">
                 Enter로 줄바꿈 · **텍스트**로 악센트 색상 적용

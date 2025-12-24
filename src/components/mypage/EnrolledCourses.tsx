@@ -12,7 +12,7 @@ interface EnrolledCoursesProps {
 export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
   if (courses.length === 0) {
     return (
-      <div className="rounded-2xl border border-border bg-card p-8 text-center">
+      <div className="rounded-sm border border-border bg-card p-8 text-center">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
           <BookOpen className="h-8 w-8 text-muted-foreground" />
         </div>
@@ -24,7 +24,7 @@ export function EnrolledCourses({ courses }: EnrolledCoursesProps) {
         </p>
         <Link
           href="/courses"
-          className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md shadow-primary/20 transition-colors hover:bg-primary/90"
+          className="inline-flex items-center gap-2 rounded-sm bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md shadow-primary/20 transition-colors hover:bg-primary/90"
         >
           코스 둘러보기
           <ArrowRight className="h-4 w-4" />

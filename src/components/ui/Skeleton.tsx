@@ -34,7 +34,7 @@ export function SkeletonButton({ className }: SkeletonProps) {
 
 export function SkeletonCard({ className }: SkeletonProps) {
   return (
-    <div className={cn('space-y-3 rounded-lg border p-4', className)}>
+    <div className={cn('space-y-3 rounded border p-4', className)}>
       <Skeleton className="h-40 w-full rounded-md" />
       <SkeletonTitle />
       <SkeletonText className="w-full" />

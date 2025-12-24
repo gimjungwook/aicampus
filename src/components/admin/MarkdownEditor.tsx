@@ -20,7 +20,7 @@ export function MarkdownEditor({
   const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit')
 
   return (
-    <div className="rounded-xl border border-border overflow-hidden">
+    <div className="rounded border border-border overflow-hidden">
       {/* 탭 헤더 */}
       <div className="flex border-b border-border bg-muted/50">
         <button

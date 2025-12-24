@@ -49,7 +49,7 @@ export default function PrivacyPage() {
 
             <section className="mt-8">
               <h2 className="text-xl font-semibold text-foreground">2. 수집하는 개인정보 항목</h2>
-              <div className="mt-4 overflow-hidden rounded-xl border border-border">
+              <div className="mt-4 overflow-hidden rounded border border-border">
                 <table className="w-full text-sm">
                   <thead className="bg-muted">
                     <tr>
@@ -103,7 +103,7 @@ export default function PrivacyPage() {
 
             <section className="mt-8">
               <h2 className="text-xl font-semibold text-foreground">5. AI 서비스 관련 안내</h2>
-              <div className="mt-4 rounded-xl border border-primary/20 bg-primary/5 p-4">
+              <div className="mt-4 rounded border border-primary/20 bg-primary/5 p-4">
                 <p className="font-medium text-primary">
                   AI 샌드박스 이용 시 주의사항
                 </p>
@@ -142,7 +142,7 @@ export default function PrivacyPage() {
               <p className="mt-2 text-foreground/80">
                 개인정보 처리에 관한 문의사항이 있으시면 아래 연락처로 문의해 주시기 바랍니다.
               </p>
-              <div className="mt-4 rounded-xl border border-border bg-muted/50 p-4">
+              <div className="mt-4 rounded border border-border bg-muted/50 p-4">
                 <p className="text-foreground/80">
                   이메일: privacy@aicampus.com
                 </p>

@@ -36,7 +36,7 @@ function MyPageSkeleton() {
           {/* 콘텐츠 스켈레톤 - 코스 카드 */}
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="overflow-hidden rounded-2xl border border-border bg-card">
+              <div key={i} className="overflow-hidden rounded-sm border border-border bg-card">
                 <Skeleton className="aspect-video w-full" />
                 <div className="p-4">
                   <div className="mb-2 flex gap-2">
@@ -46,7 +46,7 @@ function MyPageSkeleton() {
                   <Skeleton className="mb-3 h-6 w-full" />
                   <Skeleton className="mb-1 h-4 w-24" />
                   <Skeleton className="mb-4 h-2 w-full rounded-full" />
-                  <Skeleton className="h-10 w-full rounded-xl" />
+                  <Skeleton className="h-10 w-full rounded-sm" />
                 </div>
               </div>
             ))}
@@ -152,7 +152,7 @@ export default function MyPage() {
 
             {activeTab === 'profile' && (
               <div className="mx-auto max-w-md">
-                <div className="rounded-2xl border border-border bg-card p-6">
+                <div className="rounded-sm border border-border bg-card p-6">
                   <ProfileEditForm
                     profile={profile}
                     onUpdate={handleProfileUpdate}

@@ -79,29 +79,29 @@ export function ChatInterface({
             {/* 사용자 메시지 스켈레톤 */}
             <div className="flex justify-end">
               <div className="max-w-[85%] space-y-2">
-                <div className="h-4 w-48 animate-pulse rounded-lg bg-muted ml-auto" />
-                <div className="h-4 w-32 animate-pulse rounded-lg bg-muted ml-auto" />
+                <div className="h-4 w-48 animate-pulse rounded bg-muted ml-auto" />
+                <div className="h-4 w-32 animate-pulse rounded bg-muted ml-auto" />
               </div>
             </div>
             {/* AI 응답 스켈레톤 */}
             <div className="flex justify-start">
               <div className="max-w-[85%] space-y-2">
-                <div className="h-4 w-64 animate-pulse rounded-lg bg-muted" />
-                <div className="h-4 w-56 animate-pulse rounded-lg bg-muted" />
-                <div className="h-4 w-48 animate-pulse rounded-lg bg-muted" />
+                <div className="h-4 w-64 animate-pulse rounded bg-muted" />
+                <div className="h-4 w-56 animate-pulse rounded bg-muted" />
+                <div className="h-4 w-48 animate-pulse rounded bg-muted" />
               </div>
             </div>
             {/* 사용자 메시지 스켈레톤 */}
             <div className="flex justify-end">
               <div className="max-w-[85%] space-y-2">
-                <div className="h-4 w-40 animate-pulse rounded-lg bg-muted ml-auto" />
+                <div className="h-4 w-40 animate-pulse rounded bg-muted ml-auto" />
               </div>
             </div>
             {/* AI 응답 스켈레톤 */}
             <div className="flex justify-start">
               <div className="max-w-[85%] space-y-2">
-                <div className="h-4 w-72 animate-pulse rounded-lg bg-muted" />
-                <div className="h-4 w-64 animate-pulse rounded-lg bg-muted" />
+                <div className="h-4 w-72 animate-pulse rounded bg-muted" />
+                <div className="h-4 w-64 animate-pulse rounded bg-muted" />
               </div>
             </div>
           </div>
@@ -129,7 +129,7 @@ export function ChatInterface({
         <div className="mx-auto max-w-3xl px-4 pb-4 pt-2">
           {/* 에러 메시지 */}
           {error && (
-            <div className="mb-3 flex items-center gap-2 rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            <div className="mb-3 flex items-center gap-2 rounded bg-destructive/10 px-4 py-3 text-sm text-destructive">
               <AlertCircle className="h-4 w-4 shrink-0" />
               {error}
             </div>
@@ -137,14 +137,14 @@ export function ChatInterface({
 
           {/* 소진 메시지 */}
           {isExhausted && (
-            <div className="mb-3 rounded-xl bg-amber-500/10 px-4 py-3 text-sm text-amber-600 dark:text-amber-400">
+            <div className="mb-3 rounded bg-amber-500/10 px-4 py-3 text-sm text-amber-600 dark:text-amber-400">
               오늘 사용량을 모두 소진했습니다. {resetTime}에 초기화됩니다.
             </div>
           )}
 
           {/* 입력 영역 */}
           <div className={cn(
-            'relative rounded-2xl border border-border/50 bg-card p-3',
+            'relative rounded border border-border/50 bg-card p-3',
             'transition-all duration-200',
             'focus-within:border-primary focus-within:shadow-[0_0_0_2px_rgba(88,204,2,0.25)]',
             disabled && 'opacity-50'
@@ -187,7 +187,7 @@ export function ChatInterface({
               {isStreaming && onStop ? (
                 <button
                   onClick={onStop}
-                  className="flex h-8 w-8 items-center justify-center rounded-lg bg-destructive text-destructive-foreground transition-colors hover:bg-destructive/90"
+                  className="flex h-8 w-8 items-center justify-center rounded bg-destructive text-destructive-foreground transition-colors hover:bg-destructive/90"
                 >
                   <Square className="h-4 w-4" />
                 </button>
@@ -196,7 +196,7 @@ export function ChatInterface({
                   onClick={onSend}
                   disabled={!inputValue.trim() || isLoading || isExhausted || disabled}
                   className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg transition-all',
+                    'flex h-8 w-8 items-center justify-center rounded transition-all',
                     'disabled:cursor-not-allowed disabled:opacity-40',
                     inputValue.trim() && !isLoading && !isExhausted
                       ? 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20'

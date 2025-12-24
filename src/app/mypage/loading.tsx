@@ -24,8 +24,8 @@ export default function MyPageLoading() {
           {/* 콘텐츠 스켈레톤 */}
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="rounded-2xl border border-border bg-card p-4">
-                <Skeleton className="mb-4 aspect-video w-full rounded-xl" />
+              <div key={i} className="rounded-sm border border-border bg-card p-4">
+                <Skeleton className="mb-4 aspect-video w-full rounded-sm" />
                 <Skeleton className="mb-2 h-4 w-20" />
                 <Skeleton className="mb-4 h-6 w-full" />
                 <Skeleton className="h-2 w-full rounded-full" />

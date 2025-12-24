@@ -31,7 +31,7 @@ export function YouTubePlayer({ videoId, title }: YouTubePlayerProps) {
 
   if (error) {
     return (
-      <div className="flex aspect-video flex-col items-center justify-center gap-4 rounded-2xl bg-muted">
+      <div className="flex aspect-video flex-col items-center justify-center gap-4 rounded-sm bg-muted">
         <AlertCircle className="h-12 w-12 text-muted-foreground" />
         <p className="text-muted-foreground">영상을 불러올 수 없습니다</p>
         <Button onClick={handleRetry} variant="outline" size="sm">
@@ -43,7 +43,7 @@ export function YouTubePlayer({ videoId, title }: YouTubePlayerProps) {
   }
 
   return (
-    <div className="relative aspect-video overflow-hidden rounded-2xl bg-black">
+    <div className="relative aspect-video overflow-hidden rounded-sm bg-black">
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-muted">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />

@@ -46,7 +46,7 @@ function SortableItem({ id, children, className }: SortableItemProps) {
       ref={setNodeRef}
       style={style}
       className={cn(
-        'flex items-center gap-2 rounded-lg border border-border bg-card p-3',
+        'flex items-center gap-2 rounded border border-border bg-card p-3',
         isDragging && 'opacity-50 shadow-lg',
         className
       )}

@@ -29,7 +29,7 @@ export function AccountSettings() {
   return (
     <div className="space-y-6">
       {/* 테마 설정 */}
-      <div className="rounded-2xl border border-border bg-card p-6">
+      <div className="rounded-sm border border-border bg-card p-6">
         <h3 className="mb-4 text-lg font-semibold text-foreground">테마 설정</h3>
         <div className="flex gap-3">
           {themeOptions.map(({ value, label, icon: Icon }) => (
@@ -37,7 +37,7 @@ export function AccountSettings() {
               key={value}
               onClick={() => setTheme(value)}
               className={cn(
-                'flex flex-1 flex-col items-center gap-2 rounded-xl border-2 py-4 transition-all',
+                'flex flex-1 flex-col items-center gap-2 rounded-sm border-2 py-4 transition-all',
                 theme === value
                   ? 'border-primary bg-primary/5'
                   : 'border-border hover:border-primary/50'
@@ -59,7 +59,7 @@ export function AccountSettings() {
       </div>
 
       {/* 로그아웃 */}
-      <div className="rounded-2xl border border-border bg-card p-6">
+      <div className="rounded-sm border border-border bg-card p-6">
         <h3 className="mb-4 text-lg font-semibold text-foreground">로그아웃</h3>
         <p className="mb-4 text-sm text-muted-foreground">
           현재 기기에서 로그아웃합니다.
@@ -67,7 +67,7 @@ export function AccountSettings() {
         <button
           onClick={handleLogout}
           className={cn(
-            'flex w-full items-center justify-center gap-2 rounded-xl border border-border py-3',
+            'flex w-full items-center justify-center gap-2 rounded-sm border border-border py-3',
             'text-sm font-medium text-foreground',
             'transition-colors hover:bg-muted'
           )}
@@ -78,7 +78,7 @@ export function AccountSettings() {
       </div>
 
       {/* 계정 삭제 */}
-      <div className="rounded-2xl border border-destructive/20 bg-card p-6">
+      <div className="rounded-sm border border-destructive/20 bg-card p-6">
         <h3 className="mb-4 text-lg font-semibold text-destructive">위험 영역</h3>
         <p className="mb-4 text-sm text-muted-foreground">
           계정을 삭제하면 모든 데이터가 영구적으로 삭제됩니다.
@@ -87,7 +87,7 @@ export function AccountSettings() {
         <button
           onClick={() => setIsDeleteModalOpen(true)}
           className={cn(
-            'flex w-full items-center justify-center gap-2 rounded-xl border border-destructive py-3',
+            'flex w-full items-center justify-center gap-2 rounded-sm border border-destructive py-3',
             'text-sm font-medium text-destructive',
             'transition-colors hover:bg-destructive/10'
           )}

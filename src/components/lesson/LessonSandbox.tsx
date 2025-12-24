@@ -25,7 +25,7 @@ export function LessonSandbox({ lessonId, lessonTitle }: LessonSandboxProps) {
   } = useLessonSandbox({ lessonId })
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-border bg-card">
+    <div className="flex h-full flex-col rounded-sm border border-border bg-card">
       {/* 헤더 */}
       <div className="flex items-center justify-between border-b border-border px-4 py-3">
         <div className="flex items-center gap-2">

@@ -79,7 +79,7 @@ export function ImageUploader({
     <div className={className}>
       {value ? (
         <div className="relative inline-block w-full max-w-md">
-          <div className={`relative ${aspectClasses[aspectRatio]} w-full overflow-hidden rounded-lg border border-border`}>
+          <div className={`relative ${aspectClasses[aspectRatio]} w-full overflow-hidden rounded border border-border`}>
             <Image
               src={value}
               alt="업로드된 이미지"
@@ -100,7 +100,7 @@ export function ImageUploader({
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={isUploading}
-          className={`flex ${aspectClasses[aspectRatio]} w-full max-w-md flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border hover:border-primary hover:bg-muted/50 transition-colors disabled:opacity-50`}
+          className={`flex ${aspectClasses[aspectRatio]} w-full max-w-md flex-col items-center justify-center gap-2 rounded border-2 border-dashed border-border hover:border-primary hover:bg-muted/50 transition-colors disabled:opacity-50`}
         >
           {isUploading ? (
             <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />

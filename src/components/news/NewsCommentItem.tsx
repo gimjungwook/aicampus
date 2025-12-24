@@ -69,7 +69,7 @@ export function NewsCommentItem({
 
   return (
     <div className={isReply ? 'ml-8 border-l-2 border-border pl-4' : ''}>
-      <div className="rounded-xl bg-card p-4">
+      <div className="rounded bg-card p-4">
         {/* 헤더 */}
         <div className="mb-2 flex items-start justify-between">
           <div className="flex items-center gap-2">
@@ -88,13 +88,13 @@ export function NewsCommentItem({
             <div className="relative">
               <button
                 onClick={() => setShowMenu(!showMenu)}
-                className="rounded-lg p-1 hover:bg-muted"
+                className="rounded p-1 hover:bg-muted"
               >
                 <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
               </button>
 
               {showMenu && (
-                <div className="absolute right-0 top-8 z-10 w-32 rounded-lg border bg-card shadow-lg">
+                <div className="absolute right-0 top-8 z-10 w-32 rounded border bg-card shadow-lg">
                   <button
                     onClick={() => {
                       setIsEditing(true)
@@ -128,7 +128,7 @@ export function NewsCommentItem({
             <textarea
               value={editContent}
               onChange={(e) => setEditContent(e.target.value)}
-              className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+              className="w-full resize-none rounded border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
               rows={3}
             />
             <div className="flex justify-end gap-2">

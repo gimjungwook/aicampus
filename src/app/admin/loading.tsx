@@ -10,7 +10,7 @@ export default function AdminLoading() {
           {[1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              className="h-24 animate-pulse rounded-xl bg-muted"
+              className="h-24 animate-pulse rounded bg-muted"
             />
           ))}
         </div>

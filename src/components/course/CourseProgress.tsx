@@ -25,7 +25,7 @@ export function CourseProgress({
   return (
     <div
       className={cn(
-        'flex items-center gap-6 rounded-2xl border border-border bg-card p-6',
+        'flex items-center gap-6 rounded-sm border border-border bg-card p-6',
         className
       )}
     >

@@ -70,10 +70,10 @@ export function Header() {
 
           {/* Icon Buttons */}
           <div className="flex items-center gap-2">
-            <button className="p-2 rounded-lg hover:bg-muted" aria-label="언어 선택">
+            <button className="p-2 rounded-sm hover:bg-muted" aria-label="언어 선택">
               <Globe className="h-5 w-5" />
             </button>
-            <button className="p-2 rounded-lg hover:bg-muted relative" aria-label="장바구니">
+            <button className="p-2 rounded-sm hover:bg-muted relative" aria-label="장바구니">
               <ShoppingCart className="h-5 w-5" />
             </button>
           </div>
@@ -103,7 +103,7 @@ export function Header() {
 
               {/* Dropdown Menu */}
               {profileMenuOpen && (
-                <div className="absolute right-0 top-14 w-72 rounded-2xl border bg-card shadow-xl">
+                <div className="absolute right-0 top-14 w-72 rounded-sm border bg-card shadow-xl">
                   {/* User Info */}
                   <div className="px-5 py-4">
                     <p className="text-base font-semibold text-card-foreground">
@@ -119,7 +119,7 @@ export function Header() {
                     <Link
                       href="/mypage"
                       onClick={() => setProfileMenuOpen(false)}
-                      className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-card-foreground transition-colors hover:bg-muted"
+                      className="flex items-center gap-3 rounded-sm px-4 py-3 text-sm font-medium text-card-foreground transition-colors hover:bg-muted"
                     >
                       <User className="h-5 w-5 text-muted-foreground" />
                       마이페이지
@@ -130,7 +130,7 @@ export function Header() {
 
                   {/* Theme Toggle */}
                   <div className="p-2">
-                    <div className="flex items-center justify-between rounded-xl px-4 py-3">
+                    <div className="flex items-center justify-between rounded-sm px-4 py-3">
                       <span className="text-sm font-medium text-card-foreground">테마</span>
                       <ThemeToggle />
                     </div>
@@ -145,7 +145,7 @@ export function Header() {
                         signOut()
                         setProfileMenuOpen(false)
                       }}
-                      className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-destructive transition-colors hover:bg-destructive/10"
+                      className="flex w-full items-center gap-3 rounded-sm px-4 py-3 text-sm font-medium text-destructive transition-colors hover:bg-destructive/10"
                     >
                       <LogOut className="h-5 w-5" />
                       로그아웃
@@ -157,7 +157,7 @@ export function Header() {
           ) : (
             <Link
               href="/login"
-              className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+              className="rounded-sm bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
               로그인
             </Link>
@@ -166,7 +166,7 @@ export function Header() {
 
         {/* Mobile: Menu Button */}
         <button
-          className="rounded-xl p-2 hover:bg-muted md:hidden"
+          className="rounded-sm p-2 hover:bg-muted md:hidden"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="메뉴 열기"
         >
@@ -189,7 +189,7 @@ export function Header() {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  'block rounded-xl px-4 py-3 text-base transition-colors hover:bg-muted hover:text-foreground',
+                  'block rounded-sm px-4 py-3 text-base transition-colors hover:bg-muted hover:text-foreground',
                   isActive
                     ? 'font-bold text-foreground'
                     : 'font-semibold text-muted-foreground'
@@ -202,7 +202,7 @@ export function Header() {
           })}
 
           {loading ? (
-            <div className="h-10 w-full animate-pulse rounded-xl bg-muted" />
+            <div className="h-10 w-full animate-pulse rounded-sm bg-muted" />
           ) : user ? (
             <>
               {/* User Info */}
@@ -213,7 +213,7 @@ export function Header() {
 
               <Link
                 href="/mypage"
-                className="flex items-center gap-3 rounded-xl px-4 py-3 text-base font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                className="flex items-center gap-3 rounded-sm px-4 py-3 text-base font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <User className="h-5 w-5" />
@@ -221,7 +221,7 @@ export function Header() {
               </Link>
 
               {/* Theme */}
-              <div className="flex items-center justify-between rounded-xl px-4 py-3">
+              <div className="flex items-center justify-between rounded-sm px-4 py-3">
                 <span className="text-base font-semibold text-muted-foreground">테마</span>
                 <ThemeToggle />
               </div>
@@ -231,7 +231,7 @@ export function Header() {
                   signOut()
                   setMobileMenuOpen(false)
                 }}
-                className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-base font-semibold text-destructive transition-colors hover:bg-destructive/10"
+                className="flex w-full items-center gap-3 rounded-sm px-4 py-3 text-base font-semibold text-destructive transition-colors hover:bg-destructive/10"
               >
                 <LogOut className="h-5 w-5" />
                 로그아웃
@@ -242,7 +242,7 @@ export function Header() {
               <Link
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block w-full rounded-xl bg-primary px-4 py-3 text-center text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                className="block w-full rounded-sm bg-primary px-4 py-3 text-center text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
               >
                 로그인
               </Link>

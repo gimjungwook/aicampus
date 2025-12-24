@@ -9,13 +9,13 @@ export default function SandboxLoading() {
         {/* 사이드바 스켈레톤 */}
         <aside className="hidden w-72 border-r border-border bg-card lg:block">
           <div className="p-3">
-            <div className="h-10 w-full animate-pulse rounded-lg bg-muted" />
+            <div className="h-10 w-full animate-pulse rounded bg-muted" />
           </div>
           <div className="space-y-2 p-2">
             {[...Array(5)].map((_, i) => (
               <div
                 key={i}
-                className="h-16 animate-pulse rounded-lg bg-muted"
+                className="h-16 animate-pulse rounded bg-muted"
               />
             ))}
           </div>

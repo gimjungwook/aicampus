@@ -43,11 +43,11 @@ export function DeleteAccountModal({ isOpen, onClose }: DeleteAccountModalProps)
       />
 
       {/* 모달 */}
-      <div className="relative mx-4 w-full max-w-md rounded-2xl bg-card p-6 shadow-xl">
+      <div className="relative mx-4 w-full max-w-md rounded-sm bg-card p-6 shadow-xl">
         {/* 닫기 버튼 */}
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-lg p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
+          className="absolute right-4 top-4 rounded-sm p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
         >
           <X className="h-5 w-5" />
         </button>
@@ -79,7 +79,7 @@ export function DeleteAccountModal({ isOpen, onClose }: DeleteAccountModalProps)
             onChange={(e) => setConfirmText(e.target.value)}
             placeholder="계정 삭제"
             className={cn(
-              'w-full rounded-xl border border-border bg-background px-4 py-3 text-sm',
+              'w-full rounded-sm border border-border bg-background px-4 py-3 text-sm',
               'placeholder:text-muted-foreground',
               'focus:border-destructive focus:outline-none focus:ring-2 focus:ring-destructive/20'
             )}
@@ -88,7 +88,7 @@ export function DeleteAccountModal({ isOpen, onClose }: DeleteAccountModalProps)
 
         {/* 에러 */}
         {error && (
-          <div className="mb-4 rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          <div className="mb-4 rounded-sm bg-destructive/10 px-4 py-3 text-sm text-destructive">
             {error}
           </div>
         )}
@@ -97,7 +97,7 @@ export function DeleteAccountModal({ isOpen, onClose }: DeleteAccountModalProps)
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 rounded-xl border border-border bg-background py-3 text-sm font-medium text-foreground hover:bg-muted"
+            className="flex-1 rounded-sm border border-border bg-background py-3 text-sm font-medium text-foreground hover:bg-muted"
           >
             취소
           </button>
@@ -105,7 +105,7 @@ export function DeleteAccountModal({ isOpen, onClose }: DeleteAccountModalProps)
             onClick={handleDelete}
             disabled={confirmText !== '계정 삭제' || isPending}
             className={cn(
-              'flex-1 rounded-xl bg-destructive py-3 text-sm font-semibold text-destructive-foreground',
+              'flex-1 rounded-sm bg-destructive py-3 text-sm font-semibold text-destructive-foreground',
               'transition-all hover:bg-destructive/90',
               'disabled:cursor-not-allowed disabled:opacity-50'
             )}

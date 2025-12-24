@@ -48,7 +48,7 @@ export function NewsCommentSection({
           ))}
         </div>
       ) : (
-        <div className="rounded-xl bg-muted/50 py-8 text-center">
+        <div className="rounded bg-muted/50 py-8 text-center">
           <p className="text-muted-foreground">아직 댓글이 없습니다.</p>
           <p className="mt-1 text-sm text-muted-foreground">첫 번째 댓글을 작성해보세요!</p>
         </div>

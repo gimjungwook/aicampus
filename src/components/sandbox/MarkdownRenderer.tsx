@@ -104,7 +104,7 @@ function CodeBlock({ children, language }: CodeBlockProps) {
   }, [children])
 
   return (
-    <div className="group relative mb-3 rounded-lg bg-zinc-900 dark:bg-zinc-800">
+    <div className="group relative mb-3 rounded bg-zinc-900 dark:bg-zinc-800">
       <div className="flex items-center justify-between border-b border-zinc-700 px-3 py-1.5">
         <span className="text-xs text-zinc-400">{language || 'code'}</span>
         <button

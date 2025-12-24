@@ -176,7 +176,7 @@ export default function SandboxPage() {
               onClick={() => setIsSidebarOpen(true)}
               className={cn(
                 'absolute left-4 top-4 z-10 hidden lg:flex',
-                'h-9 w-9 items-center justify-center rounded-lg',
+                'h-9 w-9 items-center justify-center rounded',
                 'bg-card border border-border shadow-sm',
                 'text-muted-foreground hover:text-foreground hover:bg-muted',
                 'transition-all duration-200'
@@ -191,7 +191,7 @@ export default function SandboxPage() {
             onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
             className={cn(
               'absolute left-4 top-4 z-10 lg:hidden',
-              'h-9 w-9 flex items-center justify-center rounded-lg',
+              'h-9 w-9 flex items-center justify-center rounded',
               'bg-card border border-border shadow-sm',
               'text-muted-foreground hover:text-foreground hover:bg-muted',
               'transition-all duration-200'

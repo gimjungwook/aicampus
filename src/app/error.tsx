@@ -37,7 +37,7 @@ export default function Error({
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
           <button
             onClick={reset}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 font-semibold text-primary-foreground transition-all hover:bg-primary/90 hover:scale-105"
+            className="inline-flex items-center justify-center gap-2 rounded bg-primary px-6 py-3 font-semibold text-primary-foreground transition-all hover:bg-primary/90 hover:scale-105"
           >
             <RefreshCw className="h-5 w-5" />
             다시 시도
@@ -45,7 +45,7 @@ export default function Error({
 
           <Link
             href="/"
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background px-6 py-3 font-semibold text-foreground transition-all hover:bg-muted"
+            className="inline-flex items-center justify-center gap-2 rounded border border-border bg-background px-6 py-3 font-semibold text-foreground transition-all hover:bg-muted"
           >
             <Home className="h-5 w-5" />
             홈으로 돌아가기
@@ -58,7 +58,7 @@ export default function Error({
             <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">
               오류 상세 정보
             </summary>
-            <pre className="mt-2 max-w-lg overflow-auto rounded-lg bg-muted p-4 text-xs text-muted-foreground">
+            <pre className="mt-2 max-w-lg overflow-auto rounded bg-muted p-4 text-xs text-muted-foreground">
               {error.message}
               {error.digest && `\n\nDigest: ${error.digest}`}
             </pre>

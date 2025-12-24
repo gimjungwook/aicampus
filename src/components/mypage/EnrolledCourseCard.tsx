@@ -15,7 +15,7 @@ export function EnrolledCourseCard({ course }: EnrolledCourseCardProps) {
   const isCompleted = course.progress_percent === 100
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-border bg-card transition-all hover:shadow-lg">
+    <div className="group relative overflow-hidden rounded-sm border border-border bg-card transition-all hover:shadow-lg">
       {/* 썸네일 */}
       <div className="relative aspect-video overflow-hidden bg-muted">
         {course.thumbnail_url ? (
@@ -85,7 +85,7 @@ export function EnrolledCourseCard({ course }: EnrolledCourseCardProps) {
         <Link
           href={`/courses/${course.id}`}
           className={cn(
-            'flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold',
+            'flex w-full items-center justify-center gap-2 rounded-sm py-2.5 text-sm font-semibold',
             'transition-all duration-200',
             isCompleted
               ? 'bg-muted text-foreground hover:bg-muted/80'

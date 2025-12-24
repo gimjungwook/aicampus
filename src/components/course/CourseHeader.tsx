@@ -23,7 +23,7 @@ export function CourseHeader({ course }: CourseHeaderProps) {
       </Link>
 
       {/* 썸네일 */}
-      <div className="relative mb-6 aspect-video overflow-hidden rounded-2xl bg-muted">
+      <div className="relative mb-6 aspect-video overflow-hidden rounded-sm bg-muted">
         {course.thumbnail_url ? (
           <Image
             src={course.thumbnail_url}

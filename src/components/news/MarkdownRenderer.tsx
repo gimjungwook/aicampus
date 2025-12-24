@@ -49,13 +49,13 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             )
           }
           return (
-            <code className="block overflow-x-auto rounded-lg bg-muted p-4 text-sm font-mono">
+            <code className="block overflow-x-auto rounded bg-muted p-4 text-sm font-mono">
               {children}
             </code>
           )
         },
         pre: ({ children }) => (
-          <pre className="my-4 overflow-x-auto rounded-xl bg-muted p-4">
+          <pre className="my-4 overflow-x-auto rounded bg-muted p-4">
             {children}
           </pre>
         ),
@@ -73,7 +73,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           <img
             src={src}
             alt={alt || ''}
-            className="my-4 rounded-xl"
+            className="my-4 rounded"
           />
         ),
         hr: () => <hr className="my-8 border-border" />,

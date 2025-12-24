@@ -66,7 +66,7 @@ export function ConversationList({
         {onClose && (
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+            className="flex h-8 w-8 items-center justify-center rounded text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
           >
             <PanelLeftClose className="h-4 w-4" />
           </button>
@@ -79,7 +79,7 @@ export function ConversationList({
           onClick={onCreate}
           disabled={isCreating}
           className={cn(
-            'flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border py-3',
+            'flex w-full items-center justify-center gap-2 rounded border border-dashed border-border py-3',
             'text-sm font-medium text-muted-foreground',
             'transition-all duration-200',
             'hover:border-primary/50 hover:bg-primary/5 hover:text-primary',
@@ -104,7 +104,7 @@ export function ConversationList({
             {[1, 2, 3, 4, 5].map((i) => (
               <div
                 key={i}
-                className="flex items-center gap-3 rounded-xl px-3 py-2.5"
+                className="flex items-center gap-3 rounded px-3 py-2.5"
               >
                 <div className="h-4 w-4 animate-pulse rounded bg-muted" />
                 <div className="flex-1 space-y-2">
@@ -147,7 +147,7 @@ export function ConversationList({
                           }
                         }}
                         className={cn(
-                          'flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-left',
+                          'flex w-full cursor-pointer items-center gap-3 rounded px-3 py-2.5 text-left',
                           'transition-all duration-150',
                           selectedId === conversation.id
                             ? 'bg-primary/10 text-foreground'
@@ -171,7 +171,7 @@ export function ConversationList({
                             setMenuOpenId(menuOpenId === conversation.id ? null : conversation.id)
                           }}
                           className={cn(
-                            'shrink-0 rounded-lg p-1.5 opacity-0 transition-all',
+                            'shrink-0 rounded p-1.5 opacity-0 transition-all',
                             'hover:bg-muted-foreground/10',
                             'group-hover:opacity-100',
                             menuOpenId === conversation.id && 'opacity-100 bg-muted-foreground/10'
@@ -188,11 +188,11 @@ export function ConversationList({
                             className="fixed inset-0 z-10"
                             onClick={() => setMenuOpenId(null)}
                           />
-                          <div className="absolute right-2 top-full z-20 mt-1 rounded-xl border border-border bg-card p-1 shadow-lg">
+                          <div className="absolute right-2 top-full z-20 mt-1 rounded border border-border bg-card p-1 shadow-lg">
                             <button
                               onClick={(e) => handleDelete(e, conversation.id)}
                               disabled={deletingId === conversation.id}
-                              className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors"
+                              className="flex w-full items-center gap-2 rounded px-3 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors"
                             >
                               {deletingId === conversation.id ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />

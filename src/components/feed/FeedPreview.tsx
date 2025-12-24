@@ -13,7 +13,7 @@ export function FeedPreview({ posts }: FeedPreviewProps) {
   if (posts.length === 0) return null
 
   return (
-    <div className="space-y-0 divide-y divide-border/50 rounded-2xl border bg-card">
+    <div className="space-y-0 divide-y divide-border/50 rounded border bg-card">
       {posts.slice(0, 5).map((post) => (
         <FeedPreviewItem key={post.id} post={post} />
       ))}

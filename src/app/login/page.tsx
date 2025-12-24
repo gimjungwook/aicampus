@@ -38,7 +38,7 @@ function LoginContent() {
         <div className="w-full max-w-sm">
           {/* 로고 */}
           <Link href="/" className="mb-12 inline-flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground">
+            <div className="flex h-10 w-10 items-center justify-center rounded bg-primary text-sm font-bold text-primary-foreground">
               AI
             </div>
             <span className="text-xl font-bold text-foreground">AI Campus</span>
@@ -56,7 +56,7 @@ function LoginContent() {
           {/* Google 로그인 버튼 */}
           <GoogleLoginButton
             redirectTo={next}
-            className="w-full rounded-xl border-2 border-border bg-background py-4 text-foreground hover:bg-muted"
+            className="w-full rounded border-2 border-border bg-background py-4 text-foreground hover:bg-muted"
           />
 
           {/* 하단 약관 링크 */}
@@ -80,7 +80,7 @@ function LoginContent() {
 
         {/* 슬로건 */}
         <div className="relative z-10 px-12 text-center">
-          <div className="inline-flex items-center justify-center rounded-2xl bg-white px-8 py-6 shadow-lg">
+          <div className="inline-flex items-center justify-center rounded bg-white px-8 py-6 shadow-lg">
             <p className="text-2xl font-semibold text-gray-800">
               배우고, 실습하고, 성장하세요
             </p>

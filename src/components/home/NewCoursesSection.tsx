@@ -37,7 +37,7 @@ export function NewCoursesSection({ courses, categories }: NewCoursesSectionProp
       <div className="flex justify-center mt-10">
         <Link
           href="/courses?sort=newest"
-          className="inline-flex items-center gap-2 px-6 py-4 bg-[var(--more-button-bg)] rounded-lg font-bold hover:opacity-80 transition-opacity"
+          className="inline-flex items-center gap-2 px-6 py-4 bg-[var(--more-button-bg)] rounded-sm font-bold hover:opacity-80 transition-opacity"
         >
           더 많은 신규 강의 보러 가기!
           <ChevronRight className="h-4 w-4" />

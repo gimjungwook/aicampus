@@ -72,7 +72,7 @@ export default function TermsPage() {
 
             <section className="mt-8">
               <h2 className="text-xl font-semibold text-foreground">제5조 (AI 서비스 이용 안내)</h2>
-              <div className="mt-4 rounded-xl border border-primary/20 bg-primary/5 p-4">
+              <div className="mt-4 rounded border border-primary/20 bg-primary/5 p-4">
                 <p className="font-medium text-primary">
                   중요 안내사항
                 </p>

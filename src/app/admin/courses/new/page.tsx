@@ -60,7 +60,7 @@ export default function NewCoursePage() {
       <main className="flex-1 overflow-y-auto p-6">
         <form onSubmit={handleSubmit} className="mx-auto max-w-2xl space-y-6">
           {/* 기본 정보 */}
-          <div className="rounded-xl border border-border bg-card p-6">
+          <div className="rounded border border-border bg-card p-6">
             <h2 className="mb-4 text-lg font-semibold">기본 정보</h2>
 
             <div className="space-y-4">
@@ -86,7 +86,7 @@ export default function NewCoursePage() {
                   }
                   placeholder="코스에 대한 간단한 설명을 입력하세요"
                   rows={3}
-                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                  className="w-full rounded border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                 />
               </div>
 
@@ -106,7 +106,7 @@ export default function NewCoursePage() {
           </div>
 
           {/* 분류 정보 */}
-          <div className="rounded-xl border border-border bg-card p-6">
+          <div className="rounded border border-border bg-card p-6">
             <h2 className="mb-4 text-lg font-semibold">분류</h2>
 
             <div className="grid grid-cols-2 gap-4">
@@ -122,7 +122,7 @@ export default function NewCoursePage() {
                       category_id: e.target.value || null,
                     }))
                   }
-                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                  className="w-full rounded border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                 >
                   <option value="">카테고리 없음</option>
                   {categories.map((cat) => (
@@ -143,7 +143,7 @@ export default function NewCoursePage() {
                       difficulty: e.target.value as CourseFormData['difficulty'],
                     }))
                   }
-                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                  className="w-full rounded border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                 >
                   <option value="beginner">입문</option>
                   <option value="intermediate">중급</option>
@@ -154,7 +154,7 @@ export default function NewCoursePage() {
           </div>
 
           {/* 추가 정보 */}
-          <div className="rounded-xl border border-border bg-card p-6">
+          <div className="rounded border border-border bg-card p-6">
             <h2 className="mb-4 text-lg font-semibold">추가 정보</h2>
 
             <div className="grid grid-cols-2 gap-4">
@@ -185,7 +185,7 @@ export default function NewCoursePage() {
                       access_level: e.target.value as CourseFormData['access_level'],
                     }))
                   }
-                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                  className="w-full rounded border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                 >
                   <option value="free">무료</option>
                   <option value="lite">Lite</option>
@@ -198,7 +198,7 @@ export default function NewCoursePage() {
 
           {/* 에러 메시지 */}
           {error && (
-            <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+            <div className="rounded bg-destructive/10 p-3 text-sm text-destructive">
               {error}
             </div>
           )}

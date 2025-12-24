@@ -321,7 +321,7 @@ export default function ModulesPage({ params }: ModulesPageProps) {
         <main className="flex-1 overflow-y-auto p-6">
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-32 animate-pulse rounded-xl bg-muted" />
+              <div key={i} className="h-32 animate-pulse rounded bg-muted" />
             ))}
           </div>
         </main>
@@ -363,7 +363,7 @@ export default function ModulesPage({ params }: ModulesPageProps) {
         </div>
 
         {modules.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-12">
+          <div className="flex flex-col items-center justify-center rounded border border-dashed border-border py-12">
             <p className="text-muted-foreground">아직 모듈이 없습니다</p>
             <Button
               variant="outline"
@@ -513,7 +513,7 @@ export default function ModulesPage({ params }: ModulesPageProps) {
                 }
                 placeholder="모듈에 대한 간단한 설명"
                 rows={2}
-                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                className="w-full rounded border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
               />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
@@ -559,7 +559,7 @@ export default function ModulesPage({ params }: ModulesPageProps) {
                 }
                 placeholder="레슨에 대한 간단한 설명"
                 rows={2}
-                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                className="w-full rounded border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
               />
             </div>
 

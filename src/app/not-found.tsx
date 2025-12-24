@@ -30,7 +30,7 @@ export default function NotFound() {
         {/* Primary Action */}
         <Link
           href="/"
-          className="mb-8 inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-8 py-3 font-semibold text-primary-foreground transition-all hover:bg-primary/90 hover:scale-105"
+          className="mb-8 inline-flex items-center justify-center gap-2 rounded bg-primary px-8 py-3 font-semibold text-primary-foreground transition-all hover:bg-primary/90 hover:scale-105"
         >
           <Home className="h-5 w-5" />
           홈으로 돌아가기
@@ -47,7 +47,7 @@ export default function NotFound() {
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Link
             href="/courses"
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background px-6 py-3 font-medium text-foreground transition-colors hover:bg-muted"
+            className="inline-flex items-center justify-center gap-2 rounded border border-border bg-background px-6 py-3 font-medium text-foreground transition-colors hover:bg-muted"
           >
             <BookOpen className="h-5 w-5 text-primary" />
             코스 둘러보기
@@ -55,7 +55,7 @@ export default function NotFound() {
 
           <Link
             href="/sandbox"
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background px-6 py-3 font-medium text-foreground transition-colors hover:bg-muted"
+            className="inline-flex items-center justify-center gap-2 rounded border border-border bg-background px-6 py-3 font-medium text-foreground transition-colors hover:bg-muted"
           >
             <MessageSquare className="h-5 w-5 text-primary" />
             AI 샌드박스

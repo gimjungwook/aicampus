@@ -46,10 +46,10 @@ export default async function AdminDashboardPage() {
           {statCards.map((stat) => (
             <div
               key={stat.label}
-              className="rounded-xl border border-border bg-card p-6"
+              className="rounded border border-border bg-card p-6"
             >
               <div className="flex items-center gap-4">
-                <div className={`rounded-lg p-3 ${stat.bgColor}`}>
+                <div className={`rounded p-3 ${stat.bgColor}`}>
                   <stat.icon className={`h-6 w-6 ${stat.color}`} />
                 </div>
                 <div>
@@ -67,9 +67,9 @@ export default async function AdminDashboardPage() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <a
               href="/admin/courses/new"
-              className="flex items-center gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary transition-colors"
+              className="flex items-center gap-3 rounded border border-border bg-card p-4 hover:border-primary transition-colors"
             >
-              <div className="rounded-lg bg-primary/10 p-2">
+              <div className="rounded bg-primary/10 p-2">
                 <BookOpen className="h-5 w-5 text-primary" />
               </div>
               <div>
@@ -82,9 +82,9 @@ export default async function AdminDashboardPage() {
 
             <a
               href="/admin/categories"
-              className="flex items-center gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary transition-colors"
+              className="flex items-center gap-3 rounded border border-border bg-card p-4 hover:border-primary transition-colors"
             >
-              <div className="rounded-lg bg-green-500/10 p-2">
+              <div className="rounded bg-green-500/10 p-2">
                 <GraduationCap className="h-5 w-5 text-green-500" />
               </div>
               <div>
@@ -97,9 +97,9 @@ export default async function AdminDashboardPage() {
 
             <a
               href="/admin/courses"
-              className="flex items-center gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary transition-colors"
+              className="flex items-center gap-3 rounded border border-border bg-card p-4 hover:border-primary transition-colors"
             >
-              <div className="rounded-lg bg-purple-500/10 p-2">
+              <div className="rounded bg-purple-500/10 p-2">
                 <Users className="h-5 w-5 text-purple-500" />
               </div>
               <div>

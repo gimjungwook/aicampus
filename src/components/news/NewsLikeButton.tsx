@@ -51,7 +51,7 @@ export function NewsLikeButton({
       onClick={handleClick}
       disabled={isPending}
       className={cn(
-        'flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-all',
+        'flex items-center gap-2 rounded px-4 py-2 text-sm font-medium transition-all',
         liked
           ? 'bg-red-500/10 text-red-500 hover:bg-red-500/20'
           : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'

@@ -125,7 +125,7 @@ export function ProfileEditForm({ profile, onUpdate }: ProfileEditFormProps) {
           type="email"
           value={profile.email}
           disabled
-          className="w-full rounded-xl border border-border bg-muted px-4 py-3 text-sm text-muted-foreground"
+          className="w-full rounded-sm border border-border bg-muted px-4 py-3 text-sm text-muted-foreground"
         />
       </div>
 
@@ -141,7 +141,7 @@ export function ProfileEditForm({ profile, onUpdate }: ProfileEditFormProps) {
           placeholder="닉네임을 입력하세요"
           maxLength={20}
           className={cn(
-            'w-full rounded-xl border border-border bg-background px-4 py-3 text-sm',
+            'w-full rounded-sm border border-border bg-background px-4 py-3 text-sm',
             'placeholder:text-muted-foreground',
             'focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20'
           )}
@@ -154,7 +154,7 @@ export function ProfileEditForm({ profile, onUpdate }: ProfileEditFormProps) {
           type="button"
           onClick={() => setMarketingConsent(!marketingConsent)}
           className={cn(
-            'mt-0.5 h-5 w-5 shrink-0 rounded border-2 transition-colors',
+            'mt-0.5 h-5 w-5 shrink-0 rounded-sm border-2 transition-colors',
             marketingConsent
               ? 'border-primary bg-primary text-primary-foreground'
               : 'border-border bg-background'
@@ -173,7 +173,7 @@ export function ProfileEditForm({ profile, onUpdate }: ProfileEditFormProps) {
       {/* 메시지 */}
       {message && (
         <div className={cn(
-          'rounded-xl px-4 py-3 text-sm',
+          'rounded-sm px-4 py-3 text-sm',
           message.type === 'success'
             ? 'bg-primary/10 text-primary'
             : 'bg-destructive/10 text-destructive'
@@ -187,7 +187,7 @@ export function ProfileEditForm({ profile, onUpdate }: ProfileEditFormProps) {
         type="submit"
         disabled={isPending}
         className={cn(
-          'w-full rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground',
+          'w-full rounded-sm bg-primary py-3 text-sm font-semibold text-primary-foreground',
           'shadow-md shadow-primary/20 transition-all',
           'hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50'
         )}

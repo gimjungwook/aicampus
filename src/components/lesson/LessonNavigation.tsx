@@ -54,7 +54,7 @@ export function LessonNavigation({ context, isCompleted }: LessonNavigationProps
 
   return (
     <>
-      <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-4">
+      <div className="flex flex-col gap-4 rounded-sm border border-border bg-card p-4">
         {/* 진도 표시 */}
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted-foreground">

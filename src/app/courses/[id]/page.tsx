@@ -86,7 +86,7 @@ export default async function CourseDetailPage({
             </div>
 
             {modules.length === 0 && (
-              <div className="rounded-2xl border border-border bg-muted/30 p-8 text-center">
+              <div className="rounded-sm border border-border bg-muted/30 p-8 text-center">
                 <p className="text-muted-foreground">
                   아직 준비 중인 코스입니다. 곧 콘텐츠가 추가됩니다!
                 </p>

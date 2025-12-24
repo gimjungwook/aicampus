@@ -131,11 +131,11 @@ export default async function Home() {
             </div>
 
             <div className="flex-1">
-              <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card shadow-xl">
+              <div className="relative overflow-hidden rounded-sm border border-border/60 bg-card shadow-xl">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-primary/5" />
                 <div className="relative space-y-4 p-6">
-                  <div className="flex items-center gap-3 rounded-2xl bg-background p-4 shadow-sm ring-1 ring-border/60">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                  <div className="flex items-center gap-3 rounded-sm bg-background p-4 shadow-sm ring-1 ring-border/60">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-primary/10 text-primary">
                       <Sparkles className="h-6 w-6" />
                     </div>
                     <div>
@@ -147,20 +147,20 @@ export default async function Home() {
                       </p>
                     </div>
                   </div>
-                  <div className="rounded-2xl bg-background p-5 shadow-sm ring-1 ring-border/60">
+                  <div className="rounded-sm bg-background p-5 shadow-sm ring-1 ring-border/60">
                     <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                       <span className="h-2 w-2 rounded-full bg-primary" />
                       샌드박스 체험 중
                     </div>
                     <div className="space-y-3 text-sm leading-relaxed text-foreground">
-                      <p className="rounded-xl bg-muted p-3">
+                      <p className="rounded-sm bg-muted p-3">
                         ✅ 엑셀 데이터 200행 → 요약 보고서 1페이지
                       </p>
-                      <p className="rounded-xl bg-primary/10 p-3">
+                      <p className="rounded-sm bg-primary/10 p-3">
                         ⚡ 반복 작업을 매크로로 변환해 자동화 스크립트를
                         생성했습니다. 1시간 걸리던 작업이 8분으로 단축됩니다.
                       </p>
-                      <p className="rounded-xl bg-muted p-3">
+                      <p className="rounded-sm bg-muted p-3">
                         💡 더 개선할까요? "보고서 톤을 임원 보고용으로
                         변경"이라고 요청해보세요.
                       </p>
@@ -191,7 +191,7 @@ export default async function Home() {
               {stats.map((item) => (
                 <div
                   key={item.label}
-                  className="rounded-2xl bg-card p-5 text-center shadow-sm ring-1 ring-border/70"
+                  className="rounded-sm bg-card p-5 text-center shadow-sm ring-1 ring-border/70"
                 >
                   <p className="text-3xl font-extrabold text-primary">
                     {item.value}
@@ -220,9 +220,9 @@ export default async function Home() {
               {featureHighlights.map((feature) => (
                 <div
                   key={feature.title}
-                  className="flex flex-col gap-4 rounded-2xl bg-card p-6 shadow-sm ring-1 ring-border/70"
+                  className="flex flex-col gap-4 rounded-sm bg-card p-6 shadow-sm ring-1 ring-border/70"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-primary/10 text-primary">
                     <feature.icon className="h-6 w-6" />
                   </div>
                   <div className="space-y-2">
@@ -255,11 +255,11 @@ export default async function Home() {
               {samples.map((sample) => (
                 <div
                   key={sample.title}
-                  className="group relative overflow-hidden rounded-2xl bg-card p-6 shadow-sm ring-1 ring-border/70 transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg"
+                  className="group relative overflow-hidden rounded-sm bg-card p-6 shadow-sm ring-1 ring-border/70 transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
                   <div className="relative flex h-full flex-col gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-primary/10 text-primary">
                       <sample.icon className="h-6 w-6" />
                     </div>
                     <div className="space-y-2">
@@ -297,10 +297,10 @@ export default async function Home() {
               {howItWorks.map((item, index) => (
                 <div
                   key={item.title}
-                  className="flex flex-col gap-3 rounded-2xl bg-card p-6 shadow-sm ring-1 ring-border/70"
+                  className="flex flex-col gap-3 rounded-sm bg-card p-6 shadow-sm ring-1 ring-border/70"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-primary/10 text-primary">
                       <item.icon className="h-6 w-6" />
                     </div>
                     <span className="text-sm font-semibold text-muted-foreground">
@@ -323,7 +323,7 @@ export default async function Home() {
             <div className="mx-auto max-w-2xl px-4">
               <div className="mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-primary/10 text-primary">
                     <MessageSquare className="h-5 w-5" />
                   </div>
                   <div>

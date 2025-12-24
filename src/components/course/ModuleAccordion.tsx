@@ -29,7 +29,7 @@ export function ModuleAccordion({
   const isAllCompleted = completedCount === totalCount && totalCount > 0
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border">
+    <div className="overflow-hidden rounded-sm border border-border">
       {/* 헤더 */}
       <button
         onClick={() => setIsOpen(!isOpen)}

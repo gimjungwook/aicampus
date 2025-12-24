@@ -16,9 +16,9 @@ interface ResizablePanelsProps {
 export function ResizablePanels({
   leftPanel,
   rightPanel,
-  defaultLeftWidth = 50,
-  minLeftWidth = 30,
-  maxLeftWidth = 70,
+  defaultLeftWidth = 66.67,
+  minLeftWidth = 50,
+  maxLeftWidth = 80,
   className,
 }: ResizablePanelsProps) {
   const [leftWidth, setLeftWidth] = useState(defaultLeftWidth)
@@ -95,7 +95,7 @@ export function ResizablePanels({
         {/* Visual handle */}
         <div
           className={cn(
-            'flex h-12 w-full items-center justify-center rounded-sm',
+            'flex h-12 w-full items-center justify-center rounded',
             'bg-border group-hover:bg-primary/50 transition-colors',
             isDragging && 'bg-primary'
           )}

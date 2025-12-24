@@ -26,7 +26,7 @@ export default async function CoursesPage() {
         </div>
 
         {courses.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-12">
+          <div className="flex flex-col items-center justify-center rounded border border-dashed border-border py-12">
             <p className="text-muted-foreground">아직 코스가 없습니다</p>
             <Link href="/admin/courses/new">
               <Button variant="outline" className="mt-4">
@@ -39,7 +39,7 @@ export default async function CoursesPage() {
             {courses.map((course) => (
               <div
                 key={course.id}
-                className="overflow-hidden rounded-xl border border-border bg-card"
+                className="overflow-hidden rounded border border-border bg-card"
               >
                 {/* 썸네일 */}
                 <div className="relative aspect-video bg-muted">

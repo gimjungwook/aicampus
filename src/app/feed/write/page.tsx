@@ -165,7 +165,7 @@ export default function FeedWritePage() {
 
             {/* 에러 */}
             {error && (
-              <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+              <div className="rounded bg-destructive/10 p-3 text-sm text-destructive">
                 {error}
               </div>
             )}

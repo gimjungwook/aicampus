@@ -14,7 +14,7 @@ export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
 
   return (
-    <div className="flex items-center gap-1 rounded-lg bg-muted p-1">
+    <div className="flex items-center gap-1 rounded bg-muted p-1">
       {themes.map(({ value, icon: Icon, label }) => (
         <button
           key={value}

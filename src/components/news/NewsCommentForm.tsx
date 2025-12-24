@@ -51,7 +51,7 @@ export function NewsCommentForm({
 
   if (!isLoggedIn) {
     return (
-      <div className="rounded-xl bg-muted p-4 text-center">
+      <div className="rounded bg-muted p-4 text-center">
         <p className="text-sm text-muted-foreground">
           댓글을 작성하려면{' '}
           <a href={`/login?next=/feed/${postId}`} className="font-medium text-primary hover:underline">
@@ -70,7 +70,7 @@ export function NewsCommentForm({
         onChange={(e) => setContent(e.target.value)}
         placeholder={placeholder}
         rows={3}
-        className="w-full resize-none rounded-xl border border-border bg-background px-4 py-3 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+        className="w-full resize-none rounded border border-border bg-background px-4 py-3 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
       />
 
       {error && (

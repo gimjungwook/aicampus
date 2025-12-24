@@ -156,11 +156,11 @@ export default function CategoriesPage() {
         {isLoading ? (
           <div className="space-y-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 animate-pulse rounded-lg bg-muted" />
+              <div key={i} className="h-16 animate-pulse rounded bg-muted" />
             ))}
           </div>
         ) : categories.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-12">
+          <div className="flex flex-col items-center justify-center rounded border border-dashed border-border py-12">
             <p className="text-muted-foreground">아직 카테고리가 없습니다</p>
             <Button variant="outline" className="mt-4" onClick={() => openModal()}>
               첫 카테고리 만들기
