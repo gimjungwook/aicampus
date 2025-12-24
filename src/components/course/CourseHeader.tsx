@@ -67,7 +67,7 @@ export function CourseHeader({ course }: CourseHeaderProps) {
 
       {/* 설명 */}
       {course.description && (
-        <p className="mb-4 text-muted-foreground">{course.description}</p>
+        <p className="mb-4 whitespace-pre-line text-muted-foreground">{course.description}</p>
       )}
 
       {/* 메타 정보 */}
