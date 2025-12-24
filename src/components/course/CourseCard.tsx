@@ -30,7 +30,7 @@ export function CourseCard({ course, showProgress = true }: CourseCardProps) {
         )}
       >
         {/* 썸네일 영역 - 그라디언트 오버레이 + 텍스트 */}
-        <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
+        <div className="relative aspect-video overflow-hidden rounded-2xl">
           {course.thumbnail_url ? (
             <Image
               src={course.thumbnail_url}
