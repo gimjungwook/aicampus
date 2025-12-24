@@ -9,12 +9,14 @@ import type {
   CourseFormData,
   ModuleFormData,
   LessonFormData,
+  BannerFormData,
   DashboardStats,
   AdminActionResult,
   Category,
   Course,
   Module,
   Lesson,
+  Banner,
 } from '@/lib/types/admin'
 
 // ============ 권한 체크 헬퍼 ============
@@ -533,6 +535,140 @@ export async function deleteContentImage(
     const { error } = await supabase.storage.from('content').remove([filePath])
 
     if (error) throw new Error(error.message)
+
+    return { success: true }
+  } catch (error) {
+    return { success: false, error: (error as Error).message }
+  }
+}
+
+// ============ BANNERS ============
+
+export async function getAdminBanners(): Promise<Banner[]> {
+  const supabase = await requireAdminAction()
+
+  const { data, error } = await supabase
+    .from('article_banners')
+    .select('*')
+    .order('display_order', { ascending: true })
+
+  if (error) throw new Error(error.message)
+  return data || []
+}
+
+export async function createBanner(
+  formData: BannerFormData
+): Promise<AdminActionResult<Banner>> {
+  try {
+    const supabase = await requireAdminAction()
+
+    // 현재 배너 수 조회하여 display_order 설정
+    const { count } = await supabase
+      .from('article_banners')
+      .select('id', { count: 'exact', head: true })
+
+    const { data, error } = await supabase
+      .from('article_banners')
+      .insert({
+        ...formData,
+        display_order: formData.display_order ?? (count || 0),
+      })
+      .select()
+      .single()
+
+    if (error) throw new Error(error.message)
+
+    revalidatePath('/admin/banners')
+    revalidatePath('/courses')
+
+    return { success: true, data }
+  } catch (error) {
+    return { success: false, error: (error as Error).message }
+  }
+}
+
+export async function updateBanner(
+  id: string,
+  formData: Partial<BannerFormData>
+): Promise<AdminActionResult<Banner>> {
+  try {
+    const supabase = await requireAdminAction()
+
+    const { data, error } = await supabase
+      .from('article_banners')
+      .update({ ...formData, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw new Error(error.message)
+
+    revalidatePath('/admin/banners')
+    revalidatePath('/courses')
+
+    return { success: true, data }
+  } catch (error) {
+    return { success: false, error: (error as Error).message }
+  }
+}
+
+export async function deleteBanner(id: string): Promise<AdminActionResult> {
+  try {
+    const supabase = await requireAdminAction()
+
+    const { error } = await supabase.from('article_banners').delete().eq('id', id)
+
+    if (error) throw new Error(error.message)
+
+    revalidatePath('/admin/banners')
+    revalidatePath('/courses')
+
+    return { success: true }
+  } catch (error) {
+    return { success: false, error: (error as Error).message }
+  }
+}
+
+export async function reorderBanners(
+  bannerIds: string[]
+): Promise<AdminActionResult> {
+  try {
+    const supabase = await requireAdminAction()
+
+    for (let i = 0; i < bannerIds.length; i++) {
+      const { error } = await supabase
+        .from('article_banners')
+        .update({ display_order: i })
+        .eq('id', bannerIds[i])
+
+      if (error) throw new Error(error.message)
+    }
+
+    revalidatePath('/admin/banners')
+    revalidatePath('/courses')
+
+    return { success: true }
+  } catch (error) {
+    return { success: false, error: (error as Error).message }
+  }
+}
+
+export async function toggleBannerActive(
+  id: string,
+  isActive: boolean
+): Promise<AdminActionResult> {
+  try {
+    const supabase = await requireAdminAction()
+
+    const { error } = await supabase
+      .from('article_banners')
+      .update({ is_active: isActive, updated_at: new Date().toISOString() })
+      .eq('id', id)
+
+    if (error) throw new Error(error.message)
+
+    revalidatePath('/admin/banners')
+    revalidatePath('/courses')
 
     return { success: true }
   } catch (error) {

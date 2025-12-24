@@ -1,56 +1,51 @@
 "use client";
 
-import { useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { CategoryFilter } from "./CategoryFilter";
-import { CourseGrid } from "./CourseGrid";
+import {
+  ArticleBanner,
+  PopularCoursesSection,
+  NewCoursesSection,
+} from "@/components/home";
 import type { Category, CourseWithProgress } from "@/lib/types/course";
+import type { ArticleBanner as BannerType } from "@/lib/types/banner";
 
 interface CoursesPageClientProps {
   categories: Category[];
   courses: CourseWithProgress[];
+  banners: BannerType[];
+  popularCourses: CourseWithProgress[];
+  newCourses: CourseWithProgress[];
 }
 
 export function CoursesPageClient({
   categories,
-  courses,
+  banners,
+  popularCourses,
+  newCourses,
 }: CoursesPageClientProps) {
-  const [selectedCategory, setSelectedCategory] = useState("all");
-
-  // 카테고리 필터링
-  const filteredCourses =
-    selectedCategory === "all"
-      ? courses
-      : courses.filter((c) => c.category?.slug === selectedCategory);
-
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
 
       <main className="flex-1">
-        <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
-          {/* 헤더 */}
-          {/* <div className="mb-8">
-            <h1 className="mb-2 text-3xl font-bold">코스</h1>
-            <p className="text-muted-foreground">
-              AI 활용 능력을 키워보세요. 실습 중심의 강의로 배워봐요.
-            </p>
-          </div> */}
+        <div className="max-w-[1289px] mx-auto px-5 lg:px-0">
+          {/* 아티클 배너 */}
+          <section className="pt-6">
+            <ArticleBanner banners={banners} />
+          </section>
 
-          {/* 카테고리 필터 */}
-          {categories.length > 0 && (
-            <div className="mb-6">
-              <CategoryFilter
-                categories={categories}
-                selectedSlug={selectedCategory}
-                onSelect={setSelectedCategory}
-              />
-            </div>
-          )}
+          {/* 인기 강의 섹션 */}
+          <PopularCoursesSection
+            courses={popularCourses}
+            categories={categories}
+          />
 
-          {/* 코스 그리드 */}
-          <CourseGrid courses={filteredCourses} />
+          {/* 신규 강의 섹션 */}
+          <NewCoursesSection
+            courses={newCourses}
+            categories={categories}
+          />
         </div>
       </main>
 
