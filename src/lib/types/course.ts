@@ -25,6 +25,12 @@ export interface Course {
   price: number | null
   access_level: AccessLevel | null
   created_at: string
+  // 새로 추가된 필드
+  instructor_name?: string    // 강사명
+  is_premium?: boolean        // 프리미엄 코스 여부 (Plus 뱃지)
+  is_best?: boolean           // BEST 태그
+  is_new?: boolean            // NEW 태그
+  is_hot?: boolean            // 인기 급상승 태그
   // 조인된 데이터
   category?: Category
   modules?: Module[]

@@ -1,0 +1,48 @@
+'use client'
+
+import { useState } from 'react'
+import Link from 'next/link'
+import { ChevronRight } from 'lucide-react'
+import { SectionHeader } from './SectionHeader'
+import { CategoryFilter } from '@/components/course/CategoryFilter'
+import { CourseGrid } from '@/components/course/CourseGrid'
+import type { CourseWithProgress, Category } from '@/lib/types/course'
+
+interface PopularCoursesSectionProps {
+  courses: CourseWithProgress[]
+  categories: Category[]
+}
+
+export function PopularCoursesSection({ courses, categories }: PopularCoursesSectionProps) {
+  const [selectedSlug, setSelectedSlug] = useState('all')
+
+  const filteredCourses = selectedSlug === 'all'
+    ? courses
+    : courses.filter(c => c.category?.slug === selectedSlug)
+
+  return (
+    <section className="py-12">
+      <SectionHeader
+        title="실시간 BEST 인기 강의"
+        subtitle="가장 많은 수강생이 주목하는 TOP 5 강의를 만나보세요."
+      />
+      <div className="mb-6">
+        <CategoryFilter
+          categories={categories}
+          selectedSlug={selectedSlug}
+          onSelect={setSelectedSlug}
+        />
+      </div>
+      <CourseGrid courses={filteredCourses.slice(0, 8)} showProgress={false} />
+      <div className="flex justify-center mt-10">
+        <Link
+          href="/courses?sort=popular"
+          className="inline-flex items-center gap-2 px-6 py-4 bg-[var(--more-button-bg)] rounded-lg font-bold hover:opacity-80 transition-opacity"
+        >
+          더 많은 인기 강의 보러 가기!
+          <ChevronRight className="h-4 w-4" />
+        </Link>
+      </div>
+    </section>
+  )
+}
