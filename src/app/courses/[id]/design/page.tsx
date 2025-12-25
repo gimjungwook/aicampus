@@ -2,13 +2,15 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { getCourseWithProgress, getCourseSectionImages } from '@/lib/actions/course'
+import { getCourseWithProgress, getCourseSectionImages, getRecommendedCourses } from '@/lib/actions/course'
 import { createClient } from '@/lib/supabase/server'
 import { difficultyLabels } from '@/lib/types/course'
 import type { ModuleWithProgress } from '@/lib/types/course'
 import { BarChart3, Clock, Hash } from 'lucide-react'
 import { CurriculumAccordion } from './CurriculumAccordion'
 import { ReviewSection } from './ReviewSection'
+import { RecommendedSection } from './RecommendedSection'
+import { StickyNav } from './StickyNav'
 import { StickyFooter } from './StickyFooter'
 
 const sectionTitles = {
@@ -46,6 +48,11 @@ export default async function CourseDesignPage({
     getCourseSectionImages(id),
     supabase.auth.getUser(),
   ])
+
+  // 코스가 있을 때만 추천 코스 가져오기
+  const recommendedCourses = course
+    ? await getRecommendedCourses(id, course.category_id, 4)
+    : []
 
   if (!course) {
     notFound()
@@ -148,55 +155,65 @@ export default async function CourseDesignPage({
         </section>
 
         {/* 네비게이션 탭 */}
-        <nav className="sticky top-16 z-40 bg-[#393939]">
-          <div className="container mx-auto">
-            <div className="flex items-center justify-center gap-12">
-              <button className="relative py-4 text-sm text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-white">
-                클래스 소개
-              </button>
-              <button className="py-4 text-sm text-gray-400 hover:text-white">
-                클래스 특징
-              </button>
-              <button className="py-4 text-sm text-gray-400 hover:text-white">
-                강사 소개
-              </button>
-              <button className="py-4 text-sm text-gray-400 hover:text-white">
-                커리큘럼
-              </button>
-              <button className="py-4 text-sm text-gray-400 hover:text-white">
-                후기
-              </button>
-              <button className="py-4 text-sm text-gray-400 hover:text-white">
-                추천 클래스
-              </button>
-            </div>
-          </div>
-        </nav>
+        <StickyNav />
 
-        {/* 콘텐츠 영역 - 섹션 이미지 (전체 너비, 패딩/마진 없음) */}
-        <div className="bg-black">
-          {sections.map((sectionType) => {
-            const images = sectionImages[sectionType] || []
-            return images.map((image) => (
-              <Image
-                key={image.id}
-                src={image.image_url}
-                alt={image.alt_text || sectionTitles[sectionType]}
-                width={1920}
-                height={1080}
-                className="block w-full h-auto"
-              />
-            ))
-          })}
-
-          {/* 이미지가 하나도 없을 때 */}
-          {sections.every((s) => (sectionImages[s] || []).length === 0) && (
+        {/* 콘텐츠 영역 - 섹션 이미지 (각 섹션별 id 부여) */}
+        {/* 클래스 소개 */}
+        <section id="intro" className="bg-black">
+          {(sectionImages.intro || []).map((image) => (
+            <Image
+              key={image.id}
+              src={image.image_url}
+              alt={image.alt_text || sectionTitles.intro}
+              width={1920}
+              height={1080}
+              className="block w-full h-auto"
+            />
+          ))}
+          {(sectionImages.intro || []).length === 0 && (
             <div className="py-16 text-center text-gray-400">
-              <p>아직 등록된 섹션 이미지가 없습니다.</p>
-              <p className="mt-2 text-sm">admin에서 이미지를 추가해주세요.</p>
+              <p>클래스 소개 이미지가 없습니다.</p>
             </div>
           )}
-        </div>
+        </section>
+
+        {/* 클래스 특징 */}
+        <section id="features" className="bg-black">
+          {(sectionImages.features || []).map((image) => (
+            <Image
+              key={image.id}
+              src={image.image_url}
+              alt={image.alt_text || sectionTitles.features}
+              width={1920}
+              height={1080}
+              className="block w-full h-auto"
+            />
+          ))}
+          {(sectionImages.features || []).length === 0 && (
+            <div className="py-16 text-center text-gray-400">
+              <p>클래스 특징 이미지가 없습니다.</p>
+            </div>
+          )}
+        </section>
+
+        {/* 강사 소개 */}
+        <section id="instructor" className="bg-black">
+          {(sectionImages.instructor || []).map((image) => (
+            <Image
+              key={image.id}
+              src={image.image_url}
+              alt={image.alt_text || sectionTitles.instructor}
+              width={1920}
+              height={1080}
+              className="block w-full h-auto"
+            />
+          ))}
+          {(sectionImages.instructor || []).length === 0 && (
+            <div className="py-16 text-center text-gray-400">
+              <p>강사 소개 이미지가 없습니다.</p>
+            </div>
+          )}
+        </section>
 
         {/* 커리큘럼 섹션 */}
         <CurriculumAccordion modules={modules} />
@@ -204,8 +221,11 @@ export default async function CourseDesignPage({
         {/* 후기 섹션 */}
         <ReviewSection courseId={id} currentUser={currentUser} />
 
+        {/* 추천 강의 섹션 */}
+        <RecommendedSection courses={recommendedCourses} currentCourseId={id} />
+
         {/* Sticky footer 공간 확보 */}
-        <div className="h-16" />
+        <div className="h-16 bg-white" />
       </main>
 
       {/* Sticky Footer */}
