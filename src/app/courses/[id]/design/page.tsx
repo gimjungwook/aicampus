@@ -9,6 +9,7 @@ import type { ModuleWithProgress } from '@/lib/types/course'
 import { BarChart3, Clock, Hash } from 'lucide-react'
 import { CurriculumAccordion } from './CurriculumAccordion'
 import { ReviewSection } from './ReviewSection'
+import { StickyFooter } from './StickyFooter'
 
 const sectionTitles = {
   intro: '클래스 소개',
@@ -202,7 +203,13 @@ export default async function CourseDesignPage({
 
         {/* 후기 섹션 */}
         <ReviewSection courseId={id} currentUser={currentUser} />
+
+        {/* Sticky footer 공간 확보 */}
+        <div className="h-16" />
       </main>
+
+      {/* Sticky Footer */}
+      <StickyFooter title={course.title} />
 
       <Footer />
     </div>
