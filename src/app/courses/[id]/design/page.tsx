@@ -4,7 +4,9 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { getCourseWithProgress, getCourseSectionImages } from '@/lib/actions/course'
 import { difficultyLabels } from '@/lib/types/course'
+import type { ModuleWithProgress } from '@/lib/types/course'
 import { BarChart3, Clock, Hash } from 'lucide-react'
+import { CurriculumAccordion } from './CurriculumAccordion'
 
 const sectionTitles = {
   intro: '클래스 소개',
@@ -44,12 +46,13 @@ export default async function CourseDesignPage({
   }
 
   const sections = ['intro', 'features', 'instructor'] as const
+  const modules = (course.modules || []) as ModuleWithProgress[]
 
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main className="flex-1">
+      <main className="flex-1 bg-black">
         {/* 배너 섹션 - 썸네일 */}
         <section className="relative w-full bg-black">
           <div className="mx-auto max-w-3xl">
@@ -126,10 +129,10 @@ export default async function CourseDesignPage({
         </section>
 
         {/* 네비게이션 탭 */}
-        <nav className="sticky top-0 z-10 border-b border-gray-800 bg-black">
+        <nav className="sticky top-16 z-40 bg-[#393939]">
           <div className="container mx-auto">
             <div className="flex items-center justify-center gap-12">
-              <button className="relative py-4 text-sm text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-blue-500">
+              <button className="relative py-4 text-sm text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-white">
                 클래스 소개
               </button>
               <button className="py-4 text-sm text-gray-400 hover:text-white">
@@ -151,46 +154,33 @@ export default async function CourseDesignPage({
           </div>
         </nav>
 
-        {/* 콘텐츠 영역 - 섹션 이미지 */}
+        {/* 콘텐츠 영역 - 섹션 이미지 (전체 너비, 패딩/마진 없음) */}
         <div className="bg-black">
           {sections.map((sectionType) => {
             const images = sectionImages[sectionType] || []
-            if (images.length === 0) return null
-
-            return (
-              <section key={sectionType} id={sectionType} className="py-12">
-                <div className="container mx-auto px-4">
-                  <h2 className="mb-8 text-center text-2xl font-bold text-white">
-                    {sectionTitles[sectionType]}
-                  </h2>
-                  <div className="mx-auto max-w-4xl space-y-6">
-                    {images.map((image) => (
-                      <div key={image.id} className="overflow-hidden rounded-lg">
-                        <Image
-                          src={image.image_url}
-                          alt={image.alt_text || sectionTitles[sectionType]}
-                          width={1200}
-                          height={800}
-                          className="w-full h-auto"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </section>
-            )
+            return images.map((image) => (
+              <Image
+                key={image.id}
+                src={image.image_url}
+                alt={image.alt_text || sectionTitles[sectionType]}
+                width={1920}
+                height={1080}
+                className="block w-full h-auto"
+              />
+            ))
           })}
 
           {/* 이미지가 하나도 없을 때 */}
           {sections.every((s) => (sectionImages[s] || []).length === 0) && (
-            <div className="container mx-auto px-4 py-16">
-              <div className="text-center text-gray-400">
-                <p>아직 등록된 섹션 이미지가 없습니다.</p>
-                <p className="mt-2 text-sm">admin에서 이미지를 추가해주세요.</p>
-              </div>
+            <div className="py-16 text-center text-gray-400">
+              <p>아직 등록된 섹션 이미지가 없습니다.</p>
+              <p className="mt-2 text-sm">admin에서 이미지를 추가해주세요.</p>
             </div>
           )}
         </div>
+
+        {/* 커리큘럼 섹션 */}
+        <CurriculumAccordion modules={modules} />
       </main>
 
       <Footer />
