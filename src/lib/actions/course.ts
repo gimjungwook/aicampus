@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { Category, Course, CourseWithProgress, Lesson } from '@/lib/types/course'
+import type { Category, Course, CourseWithProgress, Lesson, CourseSectionImage } from '@/lib/types/course'
 
 // 모든 카테고리 가져오기
 export async function getCategories(): Promise<Category[]> {
@@ -269,4 +269,89 @@ export async function getCourseWithProgress(courseId: string) {
     progressPercent: total > 0 ? Math.round((totalCompleted / total) * 100) : 0,
     modules: modulesWithProgress,
   }
+}
+
+// ================================================
+// Phase 13: 강의 상세 페이지 리디자인
+// ================================================
+
+// 코스 섹션 이미지 가져오기
+export async function getCourseSectionImages(
+  courseId: string
+): Promise<Record<string, CourseSectionImage[]>> {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('course_section_images')
+    .select('*')
+    .eq('course_id', courseId)
+    .order('order_index')
+
+  if (error) {
+    console.error('Error fetching section images:', error)
+    return { intro: [], features: [], instructor: [] }
+  }
+
+  // 섹션 타입별로 그룹화
+  const grouped: Record<string, CourseSectionImage[]> = {
+    intro: [],
+    features: [],
+    instructor: [],
+  }
+
+  data?.forEach((image) => {
+    if (grouped[image.section_type]) {
+      grouped[image.section_type].push(image)
+    }
+  })
+
+  return grouped
+}
+
+// 추천 코스 가져오기 (같은 카테고리 우선 + 인기순)
+export async function getRecommendedCourses(
+  courseId: string,
+  categoryId: string | null,
+  limit: number = 4
+): Promise<Course[]> {
+  const supabase = await createClient()
+
+  // 1. 같은 카테고리의 다른 코스 가져오기
+  let sameCategoryCourses: Course[] = []
+
+  if (categoryId) {
+    const { data } = await supabase
+      .from('courses')
+      .select(`
+        *,
+        category:categories(*)
+      `)
+      .eq('category_id', categoryId)
+      .neq('id', courseId)
+      .order('created_at', { ascending: false })
+      .limit(limit)
+
+    sameCategoryCourses = data || []
+  }
+
+  // 이미 충분한 경우 반환
+  if (sameCategoryCourses.length >= limit) {
+    return sameCategoryCourses.slice(0, limit)
+  }
+
+  // 2. 부족한 경우 다른 카테고리에서 추가
+  const remainingCount = limit - sameCategoryCourses.length
+  const excludeIds = [courseId, ...sameCategoryCourses.map(c => c.id)]
+
+  const { data: otherCourses } = await supabase
+    .from('courses')
+    .select(`
+      *,
+      category:categories(*)
+    `)
+    .not('id', 'in', `(${excludeIds.join(',')})`)
+    .order('created_at', { ascending: false })
+    .limit(remainingCount)
+
+  return [...sameCategoryCourses, ...(otherCourses || [])]
 }

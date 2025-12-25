@@ -89,6 +89,7 @@ export function ProfileEditForm({ profile, onUpdate }: ProfileEditFormProps) {
               src={avatarUrl}
               alt="프로필 사진"
               fill
+              sizes="96px"
               className="object-cover"
             />
           ) : (

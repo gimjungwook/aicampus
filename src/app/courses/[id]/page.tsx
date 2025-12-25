@@ -2,12 +2,21 @@ import { notFound } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import {
-  CourseHeader,
-  CourseProgress,
-  ModuleAccordion,
-  EnrollButton,
-} from '@/components/course'
-import { getCourseWithProgress } from '@/lib/actions/course'
+  CourseDetailClient,
+  HeroSection,
+  MetaCard,
+  MisconceptionSection,
+  LearningTargetSection,
+  ImageSection,
+  CurriculumSection,
+  CTABanner,
+  ReviewSection,
+  RecommendedCourses,
+} from '@/components/course/detail'
+import { getCourseWithProgress, getCourseSectionImages } from '@/lib/actions/course'
+import { getReviewStats } from '@/lib/actions/review'
+import { createClient } from '@/lib/supabase/server'
+import { checkAdminRole } from '@/lib/utils/admin'
 import type { ModuleWithProgress } from '@/lib/types/course'
 
 interface CourseDetailPageProps {
@@ -32,7 +41,16 @@ export default async function CourseDetailPage({
   params,
 }: CourseDetailPageProps) {
   const { id } = await params
-  const course = await getCourseWithProgress(id)
+
+  // 병렬로 데이터 가져오기
+  const supabase = await createClient()
+  const [course, sectionImages, reviewStats, isAdmin, { data: { user } }] = await Promise.all([
+    getCourseWithProgress(id),
+    getCourseSectionImages(id),
+    getReviewStats(id),
+    checkAdminRole(),
+    supabase.auth.getUser()
+  ])
 
   if (!course) {
     notFound()
@@ -41,59 +59,82 @@ export default async function CourseDetailPage({
   const isEnrolled = !!course.enrollment
   const modules = course.modules as ModuleWithProgress[]
 
+  // 이미지가 있는 섹션만 필터링
+  const visibleSections = (['intro'] as const).filter(
+    section => sectionImages[section]?.length > 0
+  )
+
+  // 첫 번째 레슨 ID
+  const firstLessonId = modules[0]?.lessons?.[0]?.id
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
 
       <main className="flex-1">
-        <div className="mx-auto max-w-4xl px-4 py-8 lg:px-8">
-          {/* 코스 헤더 */}
-          <CourseHeader course={course} />
+        {/* 히어로 섹션 */}
+        <HeroSection course={course} reviewStats={reviewStats} />
 
-          {/* 진도 & 버튼 영역 */}
-          <div className="mt-8 space-y-4">
-            {/* 진도 표시 (수강 등록된 경우) */}
-            {isEnrolled && (
-              <CourseProgress
-                completedLessons={course.completedLessons}
-                totalLessons={course.total_lessons}
-                progressPercent={course.progressPercent}
-              />
-            )}
-
-            {/* 수강 시작/이어하기 버튼 */}
-            <EnrollButton
-              courseId={course.id}
+        {/* 클라이언트 래퍼 (스크롤 + 편집 모드 + 2-column 레이아웃) */}
+        <CourseDetailClient
+          visibleSections={visibleSections}
+          courseTitle={course.title}
+          courseId={course.id}
+          isEnrolled={isEnrolled}
+          firstLessonId={firstLessonId}
+          isAdmin={isAdmin}
+          sidebarContent={
+            <MetaCard
+              course={course}
               isEnrolled={isEnrolled}
               progressPercent={course.progressPercent}
+              completedLessons={course.completedLessons}
             />
-          </div>
+          }
+        >
+          {/* 소개 섹션 */}
+          <section id="intro" className="py-12">
+            {/* 이미지 섹션 (있는 경우) */}
+            {sectionImages.intro?.length > 0 && (
+              <ImageSection sectionId="intro" images={sectionImages.intro} />
+            )}
+
+            {/* 착각 섹션 */}
+            <MisconceptionSection />
+
+            {/* 추천 대상 섹션 */}
+            <LearningTargetSection />
+          </section>
 
           {/* 커리큘럼 */}
-          <section className="mt-12">
-            <h2 className="mb-4 text-xl font-bold">커리큘럼</h2>
-            <div className="space-y-3">
-              {modules.map((module, index) => (
-                <ModuleAccordion
-                  key={module.id}
-                  module={module}
-                  moduleIndex={index}
-                  isEnrolled={isEnrolled}
-                  courseId={course.id}
-                  defaultOpen={index === 0}
-                />
-              ))}
-            </div>
+          <CurriculumSection
+            modules={modules}
+            isEnrolled={isEnrolled}
+            courseId={course.id}
+          />
 
-            {modules.length === 0 && (
-              <div className="rounded-sm border border-border bg-muted/30 p-8 text-center">
-                <p className="text-muted-foreground">
-                  아직 준비 중인 코스입니다. 곧 콘텐츠가 추가됩니다!
-                </p>
-              </div>
-            )}
-          </section>
-        </div>
+          {/* CTA 배너 */}
+          <CTABanner
+            courseId={course.id}
+            courseTitle={course.title}
+            isEnrolled={isEnrolled}
+          />
+
+          {/* 리뷰 섹션 */}
+          <ReviewSection
+            courseId={course.id}
+            isEnrolled={isEnrolled}
+            progressPercent={course.progressPercent}
+            currentUserId={user?.id}
+            isAdmin={isAdmin}
+          />
+
+          {/* 추천 클래스 */}
+          <RecommendedCourses
+            courseId={course.id}
+            categoryId={course.category_id}
+          />
+        </CourseDetailClient>
       </main>
 
       <Footer />

@@ -39,6 +39,7 @@ export function FeedCard({ post }: FeedCardProps) {
                   src={post.author.avatar_url}
                   alt={post.author.display_name || ''}
                   fill
+                  sizes="40px"
                   className="object-cover"
                 />
               ) : (

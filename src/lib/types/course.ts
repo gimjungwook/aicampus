@@ -118,3 +118,64 @@ export const accessLevelLabels: Record<AccessLevel, string> = {
   pro: 'Pro',
   enterprise: 'Enterprise',
 } as const
+
+// 위시리스트 아이템
+export interface WishlistItem {
+  id: string
+  user_id: string
+  course_id: string
+  added_at: string
+  course: Course
+}
+
+// ================================================
+// Phase 13: 강의 상세 페이지 리디자인
+// ================================================
+
+// 섹션 타입
+export type SectionType = 'intro' | 'features' | 'instructor'
+
+// 섹션 이미지
+export interface CourseSectionImage {
+  id: string
+  course_id: string
+  section_type: SectionType
+  image_url: string
+  order_index: number
+  alt_text: string | null
+  created_at: string
+}
+
+// 리뷰
+export interface CourseReview {
+  id: string
+  course_id: string
+  user_id: string
+  rating: number
+  content: string
+  progress_percent: number
+  created_at: string
+  updated_at: string
+  // 조인된 데이터
+  user?: {
+    nickname: string
+    avatar_url: string | null
+  }
+  reply?: ReviewReply | null
+}
+
+// 강사 답변
+export interface ReviewReply {
+  id: string
+  review_id: string
+  user_id: string
+  content: string
+  created_at: string
+  updated_at: string
+}
+
+// 리뷰 통계
+export interface ReviewStats {
+  avgRating: number
+  reviewCount: number
+}

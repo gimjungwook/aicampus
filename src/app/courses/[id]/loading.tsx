@@ -35,8 +35,23 @@ export default function CourseDetailLoading() {
             <div className="h-5 w-24 animate-pulse rounded-sm bg-muted" />
           </div>
 
-          {/* 버튼 스켈레톤 */}
-          <div className="mt-8 h-16 w-full animate-pulse rounded-sm bg-muted" />
+          {/* 진도 & 버튼 영역 스켈레톤 */}
+          <div className="mt-8 space-y-4">
+            {/* 진도 표시 스켈레톤 (수강 등록 상태) */}
+            <div className="rounded-sm border border-border bg-card p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="h-4 w-32 animate-pulse rounded-sm bg-muted" />
+                <div className="h-4 w-12 animate-pulse rounded-sm bg-muted" />
+              </div>
+              <div className="h-2 w-full animate-pulse rounded-full bg-muted" />
+            </div>
+
+            {/* 찜하기 + 수강 버튼 스켈레톤 */}
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <div className="h-12 w-full sm:w-auto sm:px-6 animate-pulse rounded-sm bg-muted" />
+              <div className="h-12 flex-1 animate-pulse rounded-sm bg-muted" />
+            </div>
+          </div>
 
           {/* 커리큘럼 스켈레톤 */}
           <div className="mt-12">
@@ -45,8 +60,16 @@ export default function CourseDetailLoading() {
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="h-16 animate-pulse rounded-sm bg-muted"
-                />
+                  className="rounded-sm border border-border bg-card p-4"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="h-6 w-6 animate-pulse rounded bg-muted" />
+                      <div className="h-5 w-48 animate-pulse rounded-sm bg-muted" />
+                    </div>
+                    <div className="h-5 w-5 animate-pulse rounded bg-muted" />
+                  </div>
+                </div>
               ))}
             </div>
           </div>

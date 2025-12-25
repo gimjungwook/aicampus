@@ -52,7 +52,6 @@ export function ArticleBanner({ banners }: ArticleBannerProps) {
           fill
           className="object-cover object-right"
           sizes="(max-width: 1289px) 100vw, 1289px"
-          quality={90}
           priority
         />
       )}

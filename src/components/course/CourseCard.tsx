@@ -5,17 +5,22 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils/cn'
 import { BookOpen, Star } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
-import type { CourseWithProgress } from '@/lib/types/course'
+import type { Course, CourseWithProgress } from '@/lib/types/course'
 import { difficultyLabels } from '@/lib/types/course'
 
 interface CourseCardProps {
-  course: CourseWithProgress
+  course: Course | CourseWithProgress
   showProgress?: boolean
 }
 
+// Type guard to check if course has progress info
+function hasProgressInfo(course: Course | CourseWithProgress): course is CourseWithProgress {
+  return 'progressPercent' in course && 'completedLessons' in course
+}
+
 export function CourseCard({ course, showProgress = true }: CourseCardProps) {
-  const hasEnrollment = !!course.enrollment
-  const shouldShowProgress = showProgress && hasEnrollment
+  const hasEnrollment = hasProgressInfo(course) && !!course.enrollment
+  const shouldShowProgress = showProgress && hasEnrollment && hasProgressInfo(course)
 
   // 임시 평점 (실제로는 DB에서 가져와야 함)
   const rating = 4.8
@@ -37,6 +42,7 @@ export function CourseCard({ course, showProgress = true }: CourseCardProps) {
               src={course.thumbnail_url}
               alt={course.title}
               fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
@@ -53,7 +59,7 @@ export function CourseCard({ course, showProgress = true }: CourseCardProps) {
           )}
 
           {/* 진도 표시 (수강 중인 경우) */}
-          {shouldShowProgress && course.progressPercent > 0 && (
+          {shouldShowProgress && hasProgressInfo(course) && course.progressPercent > 0 && (
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/30">
               <div
                 className="h-full bg-primary transition-all"

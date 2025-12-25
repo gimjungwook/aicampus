@@ -70,6 +70,14 @@
   /* Section */
   --section-subtitle: #757678;
   --more-button-bg: #f2f2f2;
+
+  /* CTA & Dark Section */
+  --cta-red: #ff153c;
+  --cta-red-hover: #e6133a;
+  --section-dark: #1a1a2e;
+  --section-dark-alt: #16162a;
+  --section-dark-text: #ffffff;
+  --section-dark-muted: #a0a0b0;
 }
 
 .dark {
@@ -137,6 +145,14 @@
   /* Section (dark) */
   --section-subtitle: #8b9da8;
   --more-button-bg: #1a2c35;
+
+  /* CTA & Dark Section (dark mode - same colors) */
+  --cta-red: #ff153c;
+  --cta-red-hover: #e6133a;
+  --section-dark: #1a1a2e;
+  --section-dark-alt: #16162a;
+  --section-dark-text: #ffffff;
+  --section-dark-muted: #a0a0b0;
 }
 
 @theme inline {
@@ -158,6 +174,12 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --radius: var(--radius);
+  --color-cta-red: var(--cta-red);
+  --color-cta-red-hover: var(--cta-red-hover);
+  --color-section-dark: var(--section-dark);
+  --color-section-dark-alt: var(--section-dark-alt);
+  --color-section-dark-text: var(--section-dark-text);
+  --color-section-dark-muted: var(--section-dark-muted);
 }
 
 /* Base styles */

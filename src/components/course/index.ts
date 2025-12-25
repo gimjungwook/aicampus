@@ -3,7 +3,6 @@ export { CourseCardSkeleton, CourseCardSkeletonGrid } from './CourseCardSkeleton
 export { CategoryFilter } from './CategoryFilter'
 export { CourseGrid } from './CourseGrid'
 export { CoursesPageClient } from './CoursesPageClient'
-export { CourseHeader } from './CourseHeader'
 export { CourseProgress } from './CourseProgress'
 export { ModuleAccordion } from './ModuleAccordion'
 export { LessonItem } from './LessonItem'
