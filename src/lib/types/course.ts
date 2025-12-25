@@ -172,6 +172,10 @@ export interface ReviewReply {
   content: string
   created_at: string
   updated_at: string
+  user?: {
+    nickname: string
+    avatar_url: string | null
+  }
 }
 
 // 리뷰 통계

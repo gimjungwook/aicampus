@@ -3,10 +3,12 @@ import Image from 'next/image'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { getCourseWithProgress, getCourseSectionImages } from '@/lib/actions/course'
+import { createClient } from '@/lib/supabase/server'
 import { difficultyLabels } from '@/lib/types/course'
 import type { ModuleWithProgress } from '@/lib/types/course'
 import { BarChart3, Clock, Hash } from 'lucide-react'
 import { CurriculumAccordion } from './CurriculumAccordion'
+import { ReviewSection } from './ReviewSection'
 
 const sectionTitles = {
   intro: '클래스 소개',
@@ -36,13 +38,29 @@ export default async function CourseDesignPage({
   params,
 }: CourseDesignPageProps) {
   const { id } = await params
-  const [course, sectionImages] = await Promise.all([
+  const supabase = await createClient()
+
+  const [course, sectionImages, { data: { user } }] = await Promise.all([
     getCourseWithProgress(id),
     getCourseSectionImages(id),
+    supabase.auth.getUser(),
   ])
 
   if (!course) {
     notFound()
+  }
+
+  // 현재 사용자 프로필 가져오기
+  let currentUser = null
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('id, nickname, avatar_url')
+      .eq('id', user.id)
+      .single()
+    if (profile) {
+      currentUser = profile
+    }
   }
 
   const sections = ['intro', 'features', 'instructor'] as const
@@ -90,7 +108,7 @@ export default async function CourseDesignPage({
                     </div>
                     <div className="text-left">
                       <p className="text-xs text-white/60">난이도</p>
-                      <p className="text-sm font-medium text-white">{difficultyLabels[course.difficulty]}</p>
+                      <p className="text-sm font-medium text-white">{difficultyLabels[course.difficulty as keyof typeof difficultyLabels]}</p>
                     </div>
                   </div>
 
@@ -181,6 +199,9 @@ export default async function CourseDesignPage({
 
         {/* 커리큘럼 섹션 */}
         <CurriculumAccordion modules={modules} />
+
+        {/* 후기 섹션 */}
+        <ReviewSection courseId={id} currentUser={currentUser} />
       </main>
 
       <Footer />

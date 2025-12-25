@@ -117,7 +117,7 @@ export async function getCourseReviews(
     .select(`
       *,
       user:profiles(nickname, avatar_url),
-      reply:review_replies(*)
+      reply:review_replies(*, user:profiles(nickname, avatar_url))
     `, { count: 'exact' })
     .eq('course_id', courseId)
     .order('created_at', { ascending: false })
@@ -128,10 +128,10 @@ export async function getCourseReviews(
     return { reviews: [], total: 0 }
   }
 
-  // reply 배열을 단일 객체로 변환
+  // reply 처리 (1:1 관계라 객체로 옴, 배열일 경우도 대비)
   const reviews = (data || []).map(review => ({
     ...review,
-    reply: review.reply?.[0] || null
+    reply: Array.isArray(review.reply) ? review.reply[0] : review.reply || null
   }))
 
   return {
@@ -269,6 +269,27 @@ export async function canUserReview(courseId: string): Promise<{
   }
 
   return { canReview: true }
+}
+
+// 사용자의 리뷰 통계 (수강평 개수, 평균 평점)
+export async function getUserReviewStats(userId: string): Promise<{ reviewCount: number; avgRating: number }> {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('course_reviews')
+    .select('rating')
+    .eq('user_id', userId)
+
+  if (error || !data || data.length === 0) {
+    return { reviewCount: 0, avgRating: 0 }
+  }
+
+  const avgRating = data.reduce((sum, r) => sum + r.rating, 0) / data.length
+
+  return {
+    reviewCount: data.length,
+    avgRating: Math.round(avgRating * 10) / 10
+  }
 }
 
 // 유저 진도율 가져오기 (헬퍼 함수)
