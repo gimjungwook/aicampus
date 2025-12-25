@@ -12,7 +12,10 @@ import {
   updateCourse,
   deleteCourse,
 } from '@/lib/actions/admin'
+import { getCourseSectionImages } from '@/lib/actions/course'
+import { ImageSectionEditor } from '@/components/course/detail/ImageSectionEditor'
 import type { Category, Course, CourseFormData } from '@/lib/types/admin'
+import type { CourseSectionImage } from '@/lib/types/course'
 import { Trash2 } from 'lucide-react'
 
 interface CourseEditPageProps {
@@ -28,6 +31,11 @@ export default function CourseEditPage({ params }: CourseEditPageProps) {
   const [course, setCourse] = useState<Course | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [sectionImages, setSectionImages] = useState<Record<string, CourseSectionImage[]>>({
+    intro: [],
+    features: [],
+    instructor: [],
+  })
 
   const [formData, setFormData] = useState<CourseFormData>({
     title: '',
@@ -43,10 +51,13 @@ export default function CourseEditPage({ params }: CourseEditPageProps) {
   useEffect(() => {
     async function loadData() {
       setIsLoading(true)
-      const [courseData, categoriesData] = await Promise.all([
+      const [courseData, categoriesData, sectionImagesData] = await Promise.all([
         getAdminCourse(id),
         getAdminCategories(),
+        getCourseSectionImages(id),
       ])
+
+      setSectionImages(sectionImagesData)
 
       if (courseData) {
         setCourse(courseData)
@@ -66,6 +77,12 @@ export default function CourseEditPage({ params }: CourseEditPageProps) {
     }
     loadData()
   }, [id])
+
+  // 섹션 이미지 새로고침
+  async function refreshSectionImages() {
+    const data = await getCourseSectionImages(id)
+    setSectionImages(data)
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -277,6 +294,37 @@ export default function CourseEditPage({ params }: CourseEditPageProps) {
                   <option value="enterprise">Enterprise</option>
                 </select>
               </div>
+            </div>
+          </div>
+
+          {/* 섹션 이미지 관리 */}
+          <div className="rounded border border-border bg-card p-6">
+            <h2 className="mb-4 text-lg font-semibold">섹션 이미지</h2>
+            <p className="mb-6 text-sm text-muted-foreground">
+              클래스 소개, 클래스 특징, 강사 소개에 표시될 이미지를 관리합니다.
+            </p>
+
+            <div className="space-y-8">
+              <ImageSectionEditor
+                courseId={id}
+                sectionType="intro"
+                images={sectionImages.intro || []}
+                onUpdate={refreshSectionImages}
+              />
+
+              <ImageSectionEditor
+                courseId={id}
+                sectionType="features"
+                images={sectionImages.features || []}
+                onUpdate={refreshSectionImages}
+              />
+
+              <ImageSectionEditor
+                courseId={id}
+                sectionType="instructor"
+                images={sectionImages.instructor || []}
+                onUpdate={refreshSectionImages}
+              />
             </div>
           </div>
 

@@ -2,9 +2,15 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { getCourseWithProgress } from '@/lib/actions/course'
+import { getCourseWithProgress, getCourseSectionImages } from '@/lib/actions/course'
 import { difficultyLabels } from '@/lib/types/course'
 import { BarChart3, Clock, Hash } from 'lucide-react'
+
+const sectionTitles = {
+  intro: '클래스 소개',
+  features: '클래스 특징',
+  instructor: '강사 소개',
+} as const
 
 interface CourseDesignPageProps {
   params: Promise<{ id: string }>
@@ -28,11 +34,16 @@ export default async function CourseDesignPage({
   params,
 }: CourseDesignPageProps) {
   const { id } = await params
-  const course = await getCourseWithProgress(id)
+  const [course, sectionImages] = await Promise.all([
+    getCourseWithProgress(id),
+    getCourseSectionImages(id),
+  ])
 
   if (!course) {
     notFound()
   }
+
+  const sections = ['intro', 'features', 'instructor'] as const
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -57,14 +68,14 @@ export default async function CourseDesignPage({
                 </div>
               )}
               {/* 검은색 오버레이 */}
-              <div className="pointer-events-none absolute inset-0 bg-black/40" />
+              <div className="pointer-events-none absolute inset-0 bg-black/60" />
               {/* 좌우 그라디언트 오버레이 */}
               <div className="pointer-events-none absolute inset-y-0 left-0 w-48 bg-gradient-to-r from-black to-transparent" />
               <div className="pointer-events-none absolute inset-y-0 right-0 w-48 bg-gradient-to-l from-black to-transparent" />
               {/* 하단 그라디언트 오버레이 */}
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent" />
               {/* 코스 제목 및 메타 정보 */}
-              <div className="absolute inset-0 flex flex-col items-center justify-end gap-5 pb-12">
+              <div className="absolute inset-0 flex flex-col items-center justify-end gap-3 pb-5">
                 <h1 className="text-3xl font-bold text-white">{course.title}</h1>
 
                 {/* 메타 정보 */}
@@ -114,18 +125,71 @@ export default async function CourseDesignPage({
           </div>
         </section>
 
-        {/* 콘텐츠 영역 */}
-        <div className="container mx-auto px-4 py-8">
-          <div className="mb-8 rounded-sm border border-yellow-500 bg-yellow-50 p-4">
-            <p className="text-sm font-medium text-yellow-800">
-              디자인 테스트 페이지 - 코스: {course.title}
-            </p>
+        {/* 네비게이션 탭 */}
+        <nav className="sticky top-0 z-10 border-b border-gray-800 bg-black">
+          <div className="container mx-auto">
+            <div className="flex items-center justify-center gap-12">
+              <button className="relative py-4 text-sm text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-blue-500">
+                클래스 소개
+              </button>
+              <button className="py-4 text-sm text-gray-400 hover:text-white">
+                클래스 특징
+              </button>
+              <button className="py-4 text-sm text-gray-400 hover:text-white">
+                강사 소개
+              </button>
+              <button className="py-4 text-sm text-gray-400 hover:text-white">
+                커리큘럼
+              </button>
+              <button className="py-4 text-sm text-gray-400 hover:text-white">
+                후기
+              </button>
+              <button className="py-4 text-sm text-gray-400 hover:text-white">
+                추천 클래스
+              </button>
+            </div>
           </div>
+        </nav>
 
-          <div className="space-y-8">
-            <h1 className="text-3xl font-bold">{course.title}</h1>
-            <p className="text-gray-600">{course.description}</p>
-          </div>
+        {/* 콘텐츠 영역 - 섹션 이미지 */}
+        <div className="bg-black">
+          {sections.map((sectionType) => {
+            const images = sectionImages[sectionType] || []
+            if (images.length === 0) return null
+
+            return (
+              <section key={sectionType} id={sectionType} className="py-12">
+                <div className="container mx-auto px-4">
+                  <h2 className="mb-8 text-center text-2xl font-bold text-white">
+                    {sectionTitles[sectionType]}
+                  </h2>
+                  <div className="mx-auto max-w-4xl space-y-6">
+                    {images.map((image) => (
+                      <div key={image.id} className="overflow-hidden rounded-lg">
+                        <Image
+                          src={image.image_url}
+                          alt={image.alt_text || sectionTitles[sectionType]}
+                          width={1200}
+                          height={800}
+                          className="w-full h-auto"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            )
+          })}
+
+          {/* 이미지가 하나도 없을 때 */}
+          {sections.every((s) => (sectionImages[s] || []).length === 0) && (
+            <div className="container mx-auto px-4 py-16">
+              <div className="text-center text-gray-400">
+                <p>아직 등록된 섹션 이미지가 없습니다.</p>
+                <p className="mt-2 text-sm">admin에서 이미지를 추가해주세요.</p>
+              </div>
+            </div>
+          )}
         </div>
       </main>
 
