@@ -58,11 +58,6 @@ export function YouTubePlayer({ videoId, title }: YouTubePlayerProps) {
         onError={handleError}
         className="absolute inset-0 h-full w-full border-0"
       />
-      {title && !isLoading && (
-        <div className="pointer-events-none absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-          <h2 className="text-lg font-semibold text-white">{title}</h2>
-        </div>
-      )}
     </div>
   )
 }

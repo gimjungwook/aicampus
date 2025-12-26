@@ -20,6 +20,9 @@ export async function getCategories(): Promise<Category[]> {
   return data || []
 }
 
+// 난이도 정렬 순서 (기초 → 중급 → 고급)
+const difficultyOrder = { beginner: 0, intermediate: 1, advanced: 2 }
+
 // 모든 코스 가져오기 (카테고리 필터 포함)
 export async function getCourses(categorySlug?: string): Promise<Course[]> {
   const supabase = await createClient()
@@ -30,7 +33,6 @@ export async function getCourses(categorySlug?: string): Promise<Course[]> {
       *,
       category:categories(*)
     `)
-    .order('created_at', { ascending: false })
 
   // 카테고리 필터링
   if (categorySlug && categorySlug !== 'all') {
@@ -53,7 +55,15 @@ export async function getCourses(categorySlug?: string): Promise<Course[]> {
     return []
   }
 
-  return data || []
+  // 난이도 기준 정렬 (기초 → 중급 → 고급), 같은 난이도 내에서는 최신순
+  const sorted = (data || []).sort((a, b) => {
+    const diffA = difficultyOrder[a.difficulty as keyof typeof difficultyOrder] ?? 1
+    const diffB = difficultyOrder[b.difficulty as keyof typeof difficultyOrder] ?? 1
+    if (diffA !== diffB) return diffA - diffB
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  })
+
+  return sorted
 }
 
 // 사용자 진도가 포함된 코스 목록 가져오기
