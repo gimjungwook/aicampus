@@ -25,22 +25,20 @@ export async function POST() {
     const userId = profile.id
 
     // 2. lesson_progress 삭제
-    const { error: progressError, count: progressCount } = await supabase
+    const { error: progressError } = await supabase
       .from('lesson_progress')
       .delete()
       .eq('user_id', userId)
-      .select('id', { count: 'exact', head: true })
 
     if (progressError) {
       console.error('lesson_progress 삭제 오류:', progressError)
     }
 
     // 3. user_enrollments 삭제
-    const { error: enrollmentError, count: enrollmentCount } = await supabase
+    const { error: enrollmentError } = await supabase
       .from('user_enrollments')
       .delete()
       .eq('user_id', userId)
-      .select('id', { count: 'exact', head: true })
 
     if (enrollmentError) {
       console.error('user_enrollments 삭제 오류:', enrollmentError)
@@ -80,11 +78,11 @@ export async function POST() {
       success: true,
       message: `${TEST_EMAIL} 계정의 수강 정보가 초기화되었습니다.`,
       deleted: {
-        lesson_progress: progressCount ?? 0,
-        user_enrollments: enrollmentCount ?? 0,
-        sandbox_usage: '삭제 시도됨',
-        sandbox_conversations: '삭제 시도됨',
-        course_reviews: '삭제 시도됨',
+        lesson_progress: progressError ? '오류' : '완료',
+        user_enrollments: enrollmentError ? '오류' : '완료',
+        sandbox_usage: usageError ? '오류' : '완료',
+        sandbox_conversations: conversationsError ? '오류' : '완료',
+        course_reviews: reviewsError ? '오류' : '완료',
       },
     })
   } catch (error) {
