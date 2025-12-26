@@ -30,6 +30,10 @@ export interface CourseFormData {
   estimated_hours?: number | null
   price?: number | null
   access_level: 'free' | 'lite' | 'pro' | 'enterprise'
+  // 배지 필드
+  is_hot?: boolean      // 추천 (AI Campus 추천 강의)
+  is_best?: boolean     // BEST 태그
+  is_new?: boolean      // NEW 태그
 }
 
 export interface ModuleFormData {

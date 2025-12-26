@@ -15,7 +15,7 @@ export default async function CoursesPage() {
   ])
 
   // 추천, BEST, NEW 코스 분리
-  const recommendedCourses = courses.filter(c => c.is_hot).slice(0, 4)
+  const recommendedCourses = courses.filter(c => c.is_hot).slice(0, 8)
   const popularCourses = courses.filter(c => c.is_best).slice(0, 8)
   const newCourses = courses.filter(c => c.is_new).slice(0, 8)
 

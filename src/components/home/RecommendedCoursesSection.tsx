@@ -17,7 +17,7 @@ export function RecommendedCoursesSection({ courses }: RecommendedCoursesSection
         title="AI Campus가 추천하는 강의"
         subtitle="지금 가장 주목받는 강의를 만나보세요."
       />
-      <CourseGrid courses={courses.slice(0, 4)} showProgress={false} />
+      <CourseGrid courses={courses.slice(0, 8)} showProgress={false} />
     </section>
   )
 }

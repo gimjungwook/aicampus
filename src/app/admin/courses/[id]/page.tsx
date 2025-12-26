@@ -46,6 +46,9 @@ export default function CourseEditPage({ params }: CourseEditPageProps) {
     estimated_hours: null,
     price: null,
     access_level: 'free',
+    is_hot: false,
+    is_best: false,
+    is_new: false,
   })
 
   useEffect(() => {
@@ -70,6 +73,9 @@ export default function CourseEditPage({ params }: CourseEditPageProps) {
           estimated_hours: courseData.estimated_hours,
           price: courseData.price,
           access_level: courseData.access_level || 'free',
+          is_hot: courseData.is_hot || false,
+          is_best: courseData.is_best || false,
+          is_new: courseData.is_new || false,
         })
       }
       setCategories(categoriesData)
@@ -294,6 +300,67 @@ export default function CourseEditPage({ params }: CourseEditPageProps) {
                   <option value="enterprise">Enterprise</option>
                 </select>
               </div>
+            </div>
+          </div>
+
+          {/* 배지 설정 */}
+          <div className="rounded border border-border bg-card p-6">
+            <h2 className="mb-4 text-lg font-semibold">배지 설정</h2>
+            <p className="mb-4 text-sm text-muted-foreground">
+              코스 목록에서 표시될 배지를 선택하세요.
+            </p>
+
+            <div className="space-y-3">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.is_hot || false}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, is_hot: e.target.checked }))
+                  }
+                  className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                />
+                <div>
+                  <span className="font-medium">추천</span>
+                  <span className="ml-2 text-sm text-muted-foreground">
+                    - AI Campus가 추천하는 강의 섹션에 표시
+                  </span>
+                </div>
+              </label>
+
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.is_best || false}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, is_best: e.target.checked }))
+                  }
+                  className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                />
+                <div>
+                  <span className="font-medium">BEST</span>
+                  <span className="ml-2 text-sm text-muted-foreground">
+                    - 실시간 BEST 인기 강의 섹션에 표시
+                  </span>
+                </div>
+              </label>
+
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.is_new || false}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, is_new: e.target.checked }))
+                  }
+                  className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                />
+                <div>
+                  <span className="font-medium">NEW</span>
+                  <span className="ml-2 text-sm text-muted-foreground">
+                    - 신규 강의 섹션에 표시
+                  </span>
+                </div>
+              </label>
             </div>
           </div>
 
