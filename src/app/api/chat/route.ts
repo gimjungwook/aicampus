@@ -62,33 +62,33 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 사용량 체크
+    // 사용량 체크 (임시 비활성화)
     const today = new Date().toISOString().split('T')[0]
-    const limit = lessonId ? LESSON_LIMIT : INDEPENDENT_LIMIT
+    // const limit = lessonId ? LESSON_LIMIT : INDEPENDENT_LIMIT
 
-    // 현재 사용량 조회
-    const { data: usageData } = await supabase
-      .from('sandbox_usage')
-      .select('count')
-      .eq('user_id', user.id)
-      .eq('usage_date', today)
-      .is('lesson_id', lessonId || null)
-      .single()
+    // // 현재 사용량 조회
+    // const { data: usageData } = await supabase
+    //   .from('sandbox_usage')
+    //   .select('count')
+    //   .eq('user_id', user.id)
+    //   .eq('usage_date', today)
+    //   .is('lesson_id', lessonId || null)
+    //   .single()
 
-    const currentCount = usageData?.count || 0
+    // const currentCount = usageData?.count || 0
 
-    if (currentCount >= limit) {
-      const resetTime = getKSTMidnight()
-      return NextResponse.json(
-        {
-          error: '오늘 사용량을 모두 소진했습니다. 내일 다시 시도해주세요.',
-          resetAt: resetTime,
-          count: currentCount,
-          limit,
-        },
-        { status: 429 }
-      )
-    }
+    // if (currentCount >= limit) {
+    //   const resetTime = getKSTMidnight()
+    //   return NextResponse.json(
+    //     {
+    //       error: '오늘 사용량을 모두 소진했습니다. 내일 다시 시도해주세요.',
+    //       resetAt: resetTime,
+    //       count: currentCount,
+    //       limit,
+    //     },
+    //     { status: 429 }
+    //   )
+    // }
 
     if (!genAI) {
       return NextResponse.json(
