@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import {
   ArticleBanner,
+  RecommendedCoursesSection,
   PopularCoursesSection,
   NewCoursesSection,
 } from "@/components/home";
@@ -14,6 +15,7 @@ interface CoursesPageClientProps {
   categories: Category[];
   courses: CourseWithProgress[];
   banners: BannerType[];
+  recommendedCourses: CourseWithProgress[];
   popularCourses: CourseWithProgress[];
   newCourses: CourseWithProgress[];
 }
@@ -21,6 +23,7 @@ interface CoursesPageClientProps {
 export function CoursesPageClient({
   categories,
   banners,
+  recommendedCourses,
   popularCourses,
   newCourses,
 }: CoursesPageClientProps) {
@@ -34,6 +37,9 @@ export function CoursesPageClient({
           <section className="pt-6">
             <ArticleBanner banners={banners} />
           </section>
+
+          {/* AI Campus 추천 강의 섹션 */}
+          <RecommendedCoursesSection courses={recommendedCourses} />
 
           {/* 인기 강의 섹션 */}
           <PopularCoursesSection
