@@ -83,7 +83,7 @@ export default async function CoursePage({
         {/* 배너 섹션 - 썸네일 */}
         <section className="relative w-full bg-black">
           <div className="mx-auto max-w-3xl">
-            <div className="relative h-[28rem] w-full overflow-hidden">
+            <div className="relative h-[60vh] w-full overflow-hidden">
               {course.thumbnail_url ? (
                 <Image
                   src={course.thumbnail_url}
@@ -109,24 +109,24 @@ export default async function CoursePage({
                 <h1 className="text-3xl font-bold text-white">{course.title}</h1>
 
                 {/* 메타 정보 */}
-                <div className="flex items-center gap-6 mb-2">
+                <div className="flex items-center justify-center gap-8 mb-2">
                   {/* 난이도 */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-col items-center gap-1">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 backdrop-blur-sm">
                       <BarChart3 className="h-5 w-5 text-white" />
                     </div>
-                    <div className="text-left">
+                    <div className="text-center">
                       <p className="text-xs text-white/60">난이도</p>
                       <p className="text-sm font-medium text-white">{difficultyLabels[course.difficulty as keyof typeof difficultyLabels]}</p>
                     </div>
                   </div>
 
                   {/* 학습 시간 */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-col items-center gap-1">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 backdrop-blur-sm">
                       <Clock className="h-5 w-5 text-white" />
                     </div>
-                    <div className="text-left">
+                    <div className="text-center">
                       <p className="text-xs text-white/60">학습 시간</p>
                       <p className="text-sm font-medium text-white">
                         {course.estimated_hours ? `${course.estimated_hours}시간` : `${course.total_lessons}분+`}
@@ -135,11 +135,11 @@ export default async function CoursePage({
                   </div>
 
                   {/* 카테고리 */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-col items-center gap-1">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 backdrop-blur-sm">
                       <Hash className="h-5 w-5 text-white" />
                     </div>
-                    <div className="text-left">
+                    <div className="text-center">
                       <p className="text-xs text-white/60">카테고리</p>
                       <p className="text-sm font-medium text-white">{course.category?.name || '미분류'}</p>
                     </div>
