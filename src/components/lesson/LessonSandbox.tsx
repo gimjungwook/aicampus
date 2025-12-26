@@ -1,9 +1,11 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { Sparkles, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { ChatInterface } from '@/components/sandbox/ChatInterface'
 import { useLessonSandbox } from '@/lib/hooks/useLessonSandbox'
+import { getLessonTemplates, type SandboxTemplatePublic } from '@/lib/actions/lesson'
 
 interface LessonSandboxProps {
   lessonId: string
@@ -23,6 +25,16 @@ export function LessonSandbox({ lessonId, lessonTitle }: LessonSandboxProps) {
     usage,
     error,
   } = useLessonSandbox({ lessonId })
+
+  const [templates, setTemplates] = useState<SandboxTemplatePublic[]>([])
+
+  useEffect(() => {
+    async function loadTemplates() {
+      const data = await getLessonTemplates(lessonId)
+      setTemplates(data)
+    }
+    loadTemplates()
+  }, [lessonId])
 
   return (
     <div className="flex h-full flex-col rounded-sm border border-border bg-card">
@@ -66,6 +78,7 @@ export function LessonSandbox({ lessonId, lessonTitle }: LessonSandboxProps) {
           usage={usage}
           error={error || undefined}
           placeholder="이 레슨에 대해 궁금한 점을 질문해보세요..."
+          templates={templates}
         />
       </div>
     </div>

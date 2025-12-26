@@ -19,6 +19,10 @@ import {
   updateLesson,
   deleteLesson,
   reorderLessons,
+  getSandboxTemplates,
+  createSandboxTemplate,
+  updateSandboxTemplate,
+  deleteSandboxTemplate,
 } from '@/lib/actions/admin'
 import type {
   Course,
@@ -26,6 +30,8 @@ import type {
   Lesson,
   ModuleFormData,
   LessonFormData,
+  SandboxTemplate,
+  SandboxTemplateFormData,
 } from '@/lib/types/admin'
 import {
   Plus,
@@ -36,6 +42,7 @@ import {
   Play,
   FileText,
   ArrowLeft,
+  MessageSquare,
 } from 'lucide-react'
 
 interface ModulesPageProps {
@@ -84,6 +91,20 @@ export default function ModulesPage({ params }: ModulesPageProps) {
   // Delete targets
   const [deleteModule, setDeleteModule] = useState<Module | null>(null)
   const [deleteLesson, setDeleteLesson] = useState<Lesson | null>(null)
+
+  // Template Modal
+  const [templateModal, setTemplateModal] = useState<{
+    isOpen: boolean
+    lessonId: string | null
+    lessonTitle: string | null
+  }>({ isOpen: false, lessonId: null, lessonTitle: null })
+  const [templates, setTemplates] = useState<SandboxTemplate[]>([])
+  const [templateForm, setTemplateForm] = useState<SandboxTemplateFormData>({
+    title: '',
+    content: '',
+  })
+  const [editingTemplate, setEditingTemplate] = useState<SandboxTemplate | null>(null)
+  const [isLoadingTemplates, setIsLoadingTemplates] = useState(false)
 
   const [error, setError] = useState<string | null>(null)
 
@@ -314,6 +335,86 @@ export default function ModulesPage({ params }: ModulesPageProps) {
     })
   }
 
+  // Template CRUD
+  async function openTemplateModal(lessonId: string, lessonTitle: string) {
+    setTemplateModal({ isOpen: true, lessonId, lessonTitle })
+    setIsLoadingTemplates(true)
+    setError(null)
+
+    try {
+      const data = await getSandboxTemplates(lessonId)
+      setTemplates(data)
+    } catch (err) {
+      console.error('템플릿 로드 실패:', err)
+      setTemplates([])
+    } finally {
+      setIsLoadingTemplates(false)
+    }
+  }
+
+  function closeTemplateModal() {
+    setTemplateModal({ isOpen: false, lessonId: null, lessonTitle: null })
+    setTemplateForm({ title: '', content: '' })
+    setEditingTemplate(null)
+    setError(null)
+  }
+
+  function startEditTemplate(template: SandboxTemplate) {
+    setEditingTemplate(template)
+    setTemplateForm({
+      title: template.title,
+      content: template.content,
+    })
+  }
+
+  function cancelEditTemplate() {
+    setEditingTemplate(null)
+    setTemplateForm({ title: '', content: '' })
+    setError(null)
+  }
+
+  async function handleTemplateSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!templateForm.title || !templateForm.content) {
+      setError('제목과 내용을 모두 입력해주세요.')
+      return
+    }
+
+    if (!templateModal.lessonId) return
+
+    startTransition(async () => {
+      const result = editingTemplate
+        ? await updateSandboxTemplate(editingTemplate.id, templateForm)
+        : await createSandboxTemplate(templateModal.lessonId!, templateForm)
+
+      if (result.success) {
+        // 템플릿 목록 새로고침
+        const data = await getSandboxTemplates(templateModal.lessonId!)
+        setTemplates(data)
+        setTemplateForm({ title: '', content: '' })
+        setEditingTemplate(null)
+        setError(null)
+      } else {
+        setError(result.error || '저장 실패')
+      }
+    })
+  }
+
+  async function handleDeleteTemplate(templateId: string) {
+    if (!confirm('이 템플릿을 삭제하시겠습니까?')) return
+
+    startTransition(async () => {
+      const result = await deleteSandboxTemplate(templateId)
+
+      if (result.success && templateModal.lessonId) {
+        const data = await getSandboxTemplates(templateModal.lessonId)
+        setTemplates(data)
+      } else {
+        alert(result.error || '삭제 실패')
+      }
+    })
+  }
+
   if (isLoading) {
     return (
       <>
@@ -454,6 +555,16 @@ export default function ModulesPage({ params }: ModulesPageProps) {
                               )}
                             </div>
                             <div className="flex items-center gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() =>
+                                  openTemplateModal(lesson.id, lesson.title)
+                                }
+                                title="샌드박스 템플릿 관리"
+                              >
+                                <MessageSquare className="h-3 w-3 text-primary" />
+                              </Button>
                               <Button
                                 variant="ghost"
                                 size="sm"
@@ -729,6 +840,114 @@ export default function ModulesPage({ params }: ModulesPageProps) {
             isLoading={isPending}
           >
             삭제
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      {/* Template Modal */}
+      <Modal
+        isOpen={templateModal.isOpen}
+        onClose={closeTemplateModal}
+        title={`샌드박스 템플릿 관리`}
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            <strong>{templateModal.lessonTitle}</strong> 레슨의 템플릿
+          </p>
+
+          {/* 템플릿 입력 폼 */}
+          <form onSubmit={handleTemplateSubmit} className="space-y-3 rounded border border-border p-4">
+            <div className="text-sm font-medium">
+              {editingTemplate ? '템플릿 수정' : '새 템플릿 추가'}
+            </div>
+            <Input
+              label="버튼 제목"
+              value={templateForm.title}
+              onChange={(e) =>
+                setTemplateForm((prev) => ({ ...prev, title: e.target.value }))
+              }
+              placeholder="예: 개념 설명"
+            />
+            <div>
+              <label className="mb-1.5 block text-sm font-medium">
+                입력될 내용
+              </label>
+              <textarea
+                value={templateForm.content}
+                onChange={(e) =>
+                  setTemplateForm((prev) => ({ ...prev, content: e.target.value }))
+                }
+                placeholder="예: 이 개념에 대해 자세히 설명해줘"
+                rows={3}
+                className="w-full rounded border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+              />
+            </div>
+            {error && <p className="text-sm text-destructive">{error}</p>}
+            <div className="flex gap-2">
+              {editingTemplate && (
+                <Button type="button" variant="outline" size="sm" onClick={cancelEditTemplate}>
+                  취소
+                </Button>
+              )}
+              <Button type="submit" size="sm" isLoading={isPending}>
+                {editingTemplate ? '수정' : '추가'}
+              </Button>
+            </div>
+          </form>
+
+          {/* 템플릿 목록 */}
+          <div className="space-y-2">
+            <div className="text-sm font-medium">등록된 템플릿 ({templates.length}/5)</div>
+            {isLoadingTemplates ? (
+              <div className="space-y-2">
+                {[1, 2].map((i) => (
+                  <div key={i} className="h-16 animate-pulse rounded bg-muted" />
+                ))}
+              </div>
+            ) : templates.length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                등록된 템플릿이 없습니다.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {templates.map((template) => (
+                  <div
+                    key={template.id}
+                    className="flex items-start justify-between rounded border border-border bg-muted/30 p-3"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-sm">{template.title}</div>
+                      <div className="text-xs text-muted-foreground mt-1 truncate">
+                        {template.content}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 ml-2 shrink-0">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => startEditTemplate(template)}
+                      >
+                        <Pencil className="h-3 w-3" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeleteTemplate(template.id)}
+                        className="text-destructive hover:text-destructive"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <ModalFooter>
+          <Button variant="outline" onClick={closeTemplateModal}>
+            닫기
           </Button>
         </ModalFooter>
       </Modal>

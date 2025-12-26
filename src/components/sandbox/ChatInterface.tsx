@@ -7,6 +7,12 @@ import { MessageBubble, TypingIndicator } from './MessageBubble'
 import { WelcomeScreen } from './WelcomeScreen'
 import type { Message, SandboxUsage } from '@/lib/types/lesson'
 
+interface SandboxTemplate {
+  id: string
+  title: string
+  content: string
+}
+
 interface ChatInterfaceProps {
   messages: Message[]
   inputValue: string
@@ -20,6 +26,7 @@ interface ChatInterfaceProps {
   error?: string
   disabled?: boolean
   placeholder?: string
+  templates?: SandboxTemplate[]
 }
 
 export function ChatInterface({
@@ -35,6 +42,7 @@ export function ChatInterface({
   error,
   disabled,
   placeholder = 'AI에게 질문해보세요...',
+  templates = [],
 }: ChatInterfaceProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -139,6 +147,29 @@ export function ChatInterface({
           {isExhausted && (
             <div className="mb-3 rounded bg-amber-500/10 px-4 py-3 text-sm text-amber-600 dark:text-amber-400">
               오늘 사용량을 모두 소진했습니다. {resetTime}에 초기화됩니다.
+            </div>
+          )}
+
+          {/* 템플릿 버튼 */}
+          {templates.length > 0 && (
+            <div className="mb-3 flex flex-wrap gap-2">
+              {templates.map((template) => (
+                <button
+                  key={template.id}
+                  onClick={() => {
+                    onInputChange(template.content)
+                    setTimeout(() => textareaRef.current?.focus(), 100)
+                  }}
+                  disabled={disabled || isExhausted}
+                  className={cn(
+                    'rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary',
+                    'transition-all hover:bg-primary/10 hover:border-primary/50',
+                    'disabled:cursor-not-allowed disabled:opacity-50'
+                  )}
+                >
+                  {template.title}
+                </button>
+              ))}
             </div>
           )}
 

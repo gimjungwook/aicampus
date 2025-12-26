@@ -190,3 +190,28 @@ export async function getSandboxUsage(lessonId: string) {
     resetAt: tomorrow.toISOString(),
   }
 }
+
+// 샌드박스 템플릿 가져오기 (일반 사용자용)
+export interface SandboxTemplatePublic {
+  id: string
+  title: string
+  content: string
+  order_index: number
+}
+
+export async function getLessonTemplates(lessonId: string): Promise<SandboxTemplatePublic[]> {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('lesson_sandbox_templates')
+    .select('id, title, content, order_index')
+    .eq('lesson_id', lessonId)
+    .order('order_index', { ascending: true })
+
+  if (error) {
+    console.error('Error fetching templates:', error)
+    return []
+  }
+
+  return data || []
+}

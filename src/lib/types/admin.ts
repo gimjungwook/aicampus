@@ -61,6 +61,24 @@ export interface BannerFormData {
   display_order?: number
 }
 
+// ============ SANDBOX TEMPLATE TYPES ============
+
+export interface SandboxTemplate {
+  id: string
+  lesson_id: string
+  title: string
+  content: string
+  order_index: number
+  created_at: string
+  updated_at: string
+}
+
+export interface SandboxTemplateFormData {
+  title: string
+  content: string
+  order_index?: number
+}
+
 export interface Banner {
   id: string
   title: string

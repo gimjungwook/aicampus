@@ -10,6 +10,7 @@ import type {
   ModuleFormData,
   LessonFormData,
   BannerFormData,
+  SandboxTemplateFormData,
   DashboardStats,
   AdminActionResult,
   Category,
@@ -17,6 +18,7 @@ import type {
   Module,
   Lesson,
   Banner,
+  SandboxTemplate,
 } from '@/lib/types/admin'
 
 // ============ 권한 체크 헬퍼 ============
@@ -669,6 +671,129 @@ export async function toggleBannerActive(
 
     revalidatePath('/admin/banners')
     revalidatePath('/courses')
+
+    return { success: true }
+  } catch (error) {
+    return { success: false, error: (error as Error).message }
+  }
+}
+
+// ============ SANDBOX TEMPLATES ============
+
+export async function getSandboxTemplates(
+  lessonId: string
+): Promise<SandboxTemplate[]> {
+  const supabase = await requireAdminAction()
+
+  const { data, error } = await supabase
+    .from('lesson_sandbox_templates')
+    .select('*')
+    .eq('lesson_id', lessonId)
+    .order('order_index', { ascending: true })
+
+  if (error) throw new Error(error.message)
+  return data || []
+}
+
+export async function createSandboxTemplate(
+  lessonId: string,
+  formData: SandboxTemplateFormData
+): Promise<AdminActionResult<SandboxTemplate>> {
+  try {
+    const supabase = await requireAdminAction()
+
+    // 현재 템플릿 수 조회하여 order_index 설정
+    const { count } = await supabase
+      .from('lesson_sandbox_templates')
+      .select('id', { count: 'exact', head: true })
+      .eq('lesson_id', lessonId)
+
+    const { data, error } = await supabase
+      .from('lesson_sandbox_templates')
+      .insert({
+        ...formData,
+        lesson_id: lessonId,
+        order_index: formData.order_index ?? (count || 0),
+      })
+      .select()
+      .single()
+
+    if (error) throw new Error(error.message)
+
+    revalidatePath('/admin/courses')
+    revalidatePath(`/lesson/${lessonId}`)
+
+    return { success: true, data }
+  } catch (error) {
+    return { success: false, error: (error as Error).message }
+  }
+}
+
+export async function updateSandboxTemplate(
+  id: string,
+  formData: Partial<SandboxTemplateFormData>
+): Promise<AdminActionResult<SandboxTemplate>> {
+  try {
+    const supabase = await requireAdminAction()
+
+    const { data, error } = await supabase
+      .from('lesson_sandbox_templates')
+      .update(formData)
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw new Error(error.message)
+
+    revalidatePath('/admin/courses')
+    revalidatePath('/lesson')
+
+    return { success: true, data }
+  } catch (error) {
+    return { success: false, error: (error as Error).message }
+  }
+}
+
+export async function deleteSandboxTemplate(
+  id: string
+): Promise<AdminActionResult> {
+  try {
+    const supabase = await requireAdminAction()
+
+    const { error } = await supabase
+      .from('lesson_sandbox_templates')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw new Error(error.message)
+
+    revalidatePath('/admin/courses')
+    revalidatePath('/lesson')
+
+    return { success: true }
+  } catch (error) {
+    return { success: false, error: (error as Error).message }
+  }
+}
+
+export async function reorderSandboxTemplates(
+  lessonId: string,
+  templateIds: string[]
+): Promise<AdminActionResult> {
+  try {
+    const supabase = await requireAdminAction()
+
+    for (let i = 0; i < templateIds.length; i++) {
+      const { error } = await supabase
+        .from('lesson_sandbox_templates')
+        .update({ order_index: i })
+        .eq('id', templateIds[i])
+
+      if (error) throw new Error(error.message)
+    }
+
+    revalidatePath('/admin/courses')
+    revalidatePath(`/lesson/${lessonId}`)
 
     return { success: true }
   } catch (error) {
